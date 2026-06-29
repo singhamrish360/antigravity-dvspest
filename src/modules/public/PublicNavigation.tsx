@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Sun, Moon, LayoutDashboard, UserCheck, Bot } from 'lucide-react';
+import React from 'react';
+import { Shield, LayoutDashboard, UserCheck, Bot } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
-import { store } from '../../core/store';
 
 interface Props {
   activeView: string;
@@ -10,33 +9,21 @@ interface Props {
 }
 
 export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, setMode }) => {
-  const [theme, setTheme] = useState<'dark' | 'light'>(store.getSettings().theme);
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    store.updateSettings({ theme: nextTheme });
-  };
-
   return (
     <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
         
-        {/* Brand Logo */}
+        {/* Brand Logo & Firm Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }} onClick={() => setActiveView('home')}>
-          <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: 'var(--shadow-glow)' }}>
-            <Shield size={24} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: 'var(--shadow-glow)' }}>
+            <Shield size={26} />
           </div>
           <div>
-            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              ANTI-GRAVITY
+            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.02em', background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              DVS PEST CONTROL INFRASTRUCTURE CO
             </div>
-            <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-secondary)', marginTop: '-2px' }}>
-              ENTERPRISE ECOSYSTEM
+            <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-secondary)', marginTop: '-2px' }}>
+              HEADQUARTERS: LUCKNOW, UTTAR PRADESH
             </div>
           </div>
         </div>
@@ -45,10 +32,10 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
         <nav style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
           {[
             { id: 'home', label: 'Home' },
-            { id: 'services', label: 'Services & Pricing' },
-            { id: 'consultation', label: 'Book Consultation' },
+            { id: 'services', label: 'Services & Rates (₹)' },
+            { id: 'consultation', label: 'Book Inspection' },
             { id: 'gallery', label: 'Before & After' },
-            { id: 'blogs', label: 'Insights & Blog' }
+            { id: 'blogs', label: 'Pest Science Blog' }
           ].map(item => (
             <button
               key={item.id}
@@ -57,7 +44,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
                 background: 'none',
                 border: 'none',
                 color: activeView === item.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                fontWeight: activeView === item.id ? 600 : 500,
+                fontWeight: activeView === item.id ? 700 : 500,
                 fontSize: '0.95rem',
                 cursor: 'pointer',
                 transition: 'color var(--transition-fast)',
@@ -69,18 +56,14 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
           ))}
         </nav>
 
-        {/* Portal Switching & Actions */}
+        {/* Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button className="btn btn-secondary btn-sm" onClick={toggleTheme} title="Toggle Theme">
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-
           <button className="btn btn-outline btn-sm" onClick={() => setMode('ai')}>
-            <Bot size={16} /> AI Studio
+            <Bot size={16} /> AI Pest Scan
           </button>
 
           <button className="btn btn-secondary btn-sm" onClick={() => setMode('crm')}>
-            <UserCheck size={16} /> CRM
+            <UserCheck size={16} /> CRM Portal
           </button>
 
           <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>

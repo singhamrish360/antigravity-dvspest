@@ -39,7 +39,7 @@ export interface Customer {
 }
 
 export interface Lead {
-  id: string; // Unique Lead ID e.g., LEAD-2026-8941
+  id: string;
   customerName: string;
   email: string;
   phone: string;
@@ -60,7 +60,7 @@ export interface Lead {
 export interface ServiceItem {
   id: string;
   title: string;
-  category: 'General Pest Control' | 'Termite Protection' | 'Rodent Control' | 'Commercial Sanitation' | 'Disinfection';
+  category: 'Cockroaches Control' | 'Rodents Control' | 'Mosquitoes Control' | 'Termites Control' | 'Fumigation Services';
   description: string;
   basePrice: number;
   durationMinutes: number;
@@ -198,5 +198,5 @@ export interface SystemSettings {
   enableWAWhatsapp: boolean;
   googleCalendarLinked: boolean;
   aiChatbotActive: boolean;
-  theme: 'dark' | 'light';
+  theme: 'light' | 'dark';
 }

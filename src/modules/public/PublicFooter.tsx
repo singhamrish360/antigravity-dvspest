@@ -12,24 +12,24 @@ export const PublicFooter: React.FC = () => {
         {/* Col 1: Brand Info */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-              <Shield size={20} />
+            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+              <Shield size={22} />
             </div>
-            <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>
-              ANTI-GRAVITY
+            <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
+              DVS PEST CONTROL INFRASTRUCTURE CO
             </span>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-            Next-generation enterprise ecosystem automating pest control operations, commercial sanitation, and AI property diagnostics across North America.
+            Premier pest management infrastructure enterprise specializing in Cockroaches, Rodents, Mosquitoes, Termites control, and Industrial Fumigation services across Uttar Pradesh.
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-secondary)', fontSize: '0.85rem', fontWeight: 600 }}>
-            <CheckCircle2 size={16} /> EPA Certified & ISO 9001 Compliant
+            <CheckCircle2 size={16} /> ISO Certified & FSSAI Compliant Solutions
           </div>
         </div>
 
         {/* Col 2: Enterprise Contact */}
         <div>
-          <h4 style={{ marginBottom: '1.2rem', fontSize: '1.05rem', color: 'var(--text-primary)' }}>Enterprise HQ</h4>
+          <h4 style={{ marginBottom: '1.2rem', fontSize: '1.05rem', color: 'var(--text-primary)' }}>Lucknow Headquarters</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
             <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
               <MapPin size={18} style={{ color: 'var(--accent-primary)', flexShrink: 0, marginTop: '3px' }} />
@@ -48,13 +48,13 @@ export const PublicFooter: React.FC = () => {
 
         {/* Col 3: Quick Links */}
         <div>
-          <h4 style={{ marginBottom: '1.2rem', fontSize: '1.05rem', color: 'var(--text-primary)' }}>Solutions</h4>
+          <h4 style={{ marginBottom: '1.2rem', fontSize: '1.05rem', color: 'var(--text-primary)' }}>Core Solutions</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-            <li>Commercial Pest Management</li>
-            <li>Subterranean Termite Barrier</li>
-            <li>Hospital-Grade Disinfection</li>
-            <li>Smart Acoustic Rodent Exclusion</li>
-            <li>AI Computer Vision Diagnostics</li>
+            <li>Advanced Cockroaches Control (Herbal Gel)</li>
+            <li>Smart Rodents Control & Exclusion</li>
+            <li>Anti-Mosquitoes Fogging & Larvicide</li>
+            <li>Subterranean Termites Control Shield (5-Yr Warranty)</li>
+            <li>Industrial & Grain Warehouse Fumigation</li>
           </ul>
         </div>
 
@@ -65,19 +65,19 @@ export const PublicFooter: React.FC = () => {
             {settings.operatingHours}
           </p>
           <div className="glass-panel" style={{ padding: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            🔒 256-Bit SSL Encrypted Enterprise Communications & Automated Audit Trail Active
+            🔒 256-Bit SSL Encrypted Enterprise Communications Active
           </div>
         </div>
 
       </div>
 
       <div style={{ maxWidth: '1280px', margin: '3rem auto 0 auto', paddingTop: '1.5rem', borderTop: '1px solid var(--bg-glass-border)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-        <div>© 2026 Anti-Gravity Enterprise Ecosystem. All rights reserved.</div>
+        <div>© 2026 DVS PEST CONTROL INFRASTRUCTURE CO. All rights reserved. Lucknow, UP.</div>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           <span>Privacy Policy</span>
-          <span>Terms of Enterprise Service</span>
-          <span>Security & Compliance</span>
-          <span>Sitemap</span>
+          <span>Terms of Service</span>
+          <span>Compliance</span>
+          <span>Lucknow HQ</span>
         </div>
       </div>
     </footer>
