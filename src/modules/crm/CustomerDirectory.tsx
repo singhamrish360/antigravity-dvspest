@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Search, Filter, Plus, FileText, ArrowUpRight, DollarSign, ChevronRight } from 'lucide-react';
+import { Search, FileText, ChevronRight } from 'lucide-react';
 import { store } from '../../core/store';
 import { Customer } from '../../core/types';
 
@@ -37,7 +37,7 @@ export const CustomerDirectory: React.FC<Props> = ({ onSelectCustomer }) => {
     <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       {/* Header */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyBetween: 'space-between', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
         <div>
           <div className="badge badge-purple" style={{ marginBottom: '0.4rem' }}>360° Enterprise Directory</div>
           <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>Customer Master Database</h1>

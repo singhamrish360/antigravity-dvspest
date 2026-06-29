@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Eye, Layers } from 'lucide-react';
 
 export const GalleryPage: React.FC = () => {
   const [sliderPos, setSliderPos] = useState<number>(50);
@@ -50,7 +49,7 @@ export const GalleryPage: React.FC = () => {
 
               {/* Before Image (Clipped Foreground) */}
               <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: `${sliderPos}%`, overflow: 'hidden', borderRight: '3px solid #fff', boxShadow: '0 0 10px rgba(0,0,0,0.5)' }}>
-                <img src={item.before} alt="Before Treatment" style={{ absolute: 'absolute', top: 0, left: 0, width: '1000px', maxWidth: 'none', height: '100%', objectFit: 'cover' }} />
+                <img src={item.before} alt="Before Treatment" style={{ position: 'absolute', top: 0, left: 0, width: '1000px', maxWidth: 'none', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 10 }} className="badge badge-danger">
                   BEFORE INSPECTION
                 </div>

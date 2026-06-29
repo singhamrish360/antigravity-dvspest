@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Search, Clock, Tag, User, ArrowRight } from 'lucide-react';
+import { Search, Clock, Tag, User, ArrowRight } from 'lucide-react';
 import { store } from '../../core/store';
 import { BlogPost } from '../../core/types';
 
@@ -33,7 +33,7 @@ export const BlogsPage: React.FC = () => {
 
         <img src={selectedBlog.coverImageUrl} alt={selectedBlog.title} style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '2.5rem' }} />
 
-        <div className="glass-panel" style={{ padding: '2.5rem', fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--text-primary)', whitespace: 'pre-line' }}>
+        <div className="glass-panel" style={{ padding: '2.5rem', fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--text-primary)', whiteSpace: 'pre-line' }}>
           {selectedBlog.content}
         </div>
 

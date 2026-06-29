@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Phone, Calendar, Moon, Sun, LayoutDashboard, UserCheck, Bot } from 'lucide-react';
+import { Shield, Sun, Moon, LayoutDashboard, UserCheck, Bot } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
 import { store } from '../../core/store';
 
@@ -42,7 +42,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
         </div>
 
         {/* Public Nav Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.75rem', '@media (maxWidth: 768px)': { display: 'none' } }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
           {[
             { id: 'home', label: 'Home' },
             { id: 'services', label: 'Services & Pricing' },
