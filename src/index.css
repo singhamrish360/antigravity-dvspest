@@ -66,7 +66,7 @@ html, body {
   z-index: 2;
 }
 
-/* Moving Pest Crawling Animations Background */
+/* Moving Pest Crawling Animations Background - Drastically Populated */
 .pest-bg-overlay {
   position: fixed;
   top: 0;
@@ -76,40 +76,84 @@ html, body {
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
-  opacity: 0.22;
+  opacity: 0.38; /* Higher visibility for realistic colored bugs */
 }
 
 .crawling-pest {
   position: absolute;
-  font-size: 1.8rem;
-  filter: sepia(0.8) hue-rotate(15deg) contrast(1.2);
+  font-size: 2.2rem;
   user-select: none;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+  transition: transform 0.5s ease;
 }
 
-/* Crawling keyframes across screen */
-@keyframes crawlRight {
-  0% { transform: translate(-10vw, 10vh) rotate(15deg); }
-  50% { transform: translate(50vw, 40vh) rotate(-10deg); }
-  100% { transform: translate(110vw, 70vh) rotate(25deg); }
+/* Realistic Entomological Colored Styling */
+.bug-cockroach {
+  color: #a0522d; /* Reddish Brown */
 }
 
-@keyframes crawlLeft {
-  0% { transform: translate(110vw, 80vh) rotate(-160deg); }
-  50% { transform: translate(50vw, 30vh) rotate(-140deg); }
-  100% { transform: translate(-10vw, 10vh) rotate(-170deg); }
+.bug-rodent {
+  color: #696969; /* Slate/Dim Grey */
 }
 
-@keyframes flyDiagonal {
-  0% { transform: translate(0vw, 100vh) scale(0.8) rotate(45deg); }
-  50% { transform: translate(60vw, 40vh) scale(1.1) rotate(35deg); }
-  100% { transform: translate(110vw, -10vh) scale(0.9) rotate(50deg); }
+.bug-mosquito {
+  color: #1c1c1c; /* Charcoal Dark Black */
 }
 
-.pest-cockroach-1 { animation: crawlRight 35s linear infinite; }
-.pest-rodent-1 { animation: crawlLeft 45s linear infinite 5s; }
-.pest-mosquito-1 { animation: flyDiagonal 25s ease-in-out infinite 2s; }
-.pest-termite-1 { animation: crawlRight 40s linear infinite 12s; }
-.pest-cockroach-2 { animation: crawlLeft 38s linear infinite 18s; }
+.bug-termite {
+  color: #e6c280; /* Creamy Light Gold/Wood Amber */
+}
+
+/* Drastic Moving Animation Paths */
+@keyframes crawlEast {
+  0% { transform: translate(-15vw, 15vh) rotate(45deg); }
+  50% { transform: translate(45vw, 35vh) rotate(60deg); }
+  100% { transform: translate(115vw, 65vh) rotate(45deg); }
+}
+
+@keyframes crawlWest {
+  0% { transform: translate(115vw, 75vh) rotate(-135deg); }
+  50% { transform: translate(55vw, 45vh) rotate(-120deg); }
+  100% { transform: translate(-15vw, 25vh) rotate(-135deg); }
+}
+
+@keyframes crawlSouth {
+  0% { transform: translate(20vw, -10vh) rotate(90deg); }
+  50% { transform: translate(40vw, 50vh) rotate(110deg); }
+  100% { transform: translate(30vw, 110vh) rotate(90deg); }
+}
+
+@keyframes crawlNorth {
+  0% { transform: translate(80vw, 110vh) rotate(-90deg); }
+  50% { transform: translate(65vw, 50vh) rotate(-100deg); }
+  100% { transform: translate(75vw, -10vh) rotate(-90deg); }
+}
+
+@keyframes flyErratic {
+  0% { transform: translate(0vw, 90vh) scale(0.9) rotate(20deg); }
+  25% { transform: translate(30vw, 60vh) scale(1.1) rotate(-10deg); }
+  50% { transform: translate(60vw, 80vh) scale(0.85) rotate(40deg); }
+  75% { transform: translate(80vw, 30vh) scale(1.2) rotate(-30deg); }
+  100% { transform: translate(115vw, 10vh) scale(0.95) rotate(10deg); }
+}
+
+/* 15 Crawling Bug Configurations for Drastic Population density */
+.pest-c1 { animation: crawlEast 22s linear infinite; }
+.pest-c2 { animation: crawlWest 28s linear infinite 3s; }
+.pest-c3 { animation: crawlSouth 35s linear infinite 7s; }
+
+.pest-r1 { animation: crawlWest 40s linear infinite 1s; }
+.pest-r2 { animation: crawlEast 46s linear infinite 9s; }
+.pest-r3 { animation: crawlNorth 52s linear infinite 14s; }
+
+.pest-m1 { animation: flyErratic 18s ease-in-out infinite; }
+.pest-m2 { animation: flyErratic 24s ease-in-out infinite 4s; }
+.pest-m3 { animation: flyErratic 30s ease-in-out infinite 8s; }
+
+.pest-t1 { animation: crawlEast 32s linear infinite 2s; }
+.pest-t2 { animation: crawlWest 36s linear infinite 6s; }
+.pest-t3 { animation: crawlSouth 42s linear infinite 11s; }
+.pest-t4 { animation: crawlNorth 48s linear infinite 15s; }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {

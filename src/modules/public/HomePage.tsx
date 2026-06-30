@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Sparkles, Star, ChevronDown, ArrowRight, Activity, Award, MapPin } from 'lucide-react';
+import { Star, ChevronDown, ArrowRight, Activity, MapPin } from 'lucide-react';
 import { store } from '../../core/store';
 
 interface Props {
@@ -35,13 +35,28 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem', paddingBottom: '4rem', position: 'relative' }}>
       
-      {/* Moving Pests Background Animation Layer */}
+      {/* Drastically Populated Moving Pests Background Animation Layer with realistic styling */}
       <div className="pest-bg-overlay">
-        <div className="crawling-pest pest-cockroach-1">🪳</div>
-        <div className="crawling-pest pest-rodent-1">🐀</div>
-        <div className="crawling-pest pest-mosquito-1">🦟</div>
-        <div className="crawling-pest pest-termite-1">🐜</div>
-        <div className="crawling-pest pest-cockroach-2">🪳</div>
+        {/* Cockroaches */}
+        <div className="crawling-pest bug-cockroach pest-c1">🪳</div>
+        <div className="crawling-pest bug-cockroach pest-c2">🪳</div>
+        <div className="crawling-pest bug-cockroach pest-c3">🪳</div>
+
+        {/* Rodents */}
+        <div className="crawling-pest bug-rodent pest-r1">🐀</div>
+        <div className="crawling-pest bug-rodent pest-r2">🐀</div>
+        <div className="crawling-pest bug-rodent pest-r3">🐀</div>
+
+        {/* Mosquitoes */}
+        <div className="crawling-pest bug-mosquito pest-m1">🦟</div>
+        <div className="crawling-pest bug-mosquito pest-m2">🦟</div>
+        <div className="crawling-pest bug-mosquito pest-m3">🦟</div>
+
+        {/* Termites */}
+        <div className="crawling-pest bug-termite pest-t1">🐜</div>
+        <div className="crawling-pest bug-termite pest-t2">🐜</div>
+        <div className="crawling-pest bug-termite pest-t3">🐜</div>
+        <div className="crawling-pest bug-termite pest-t4">🐜</div>
       </div>
 
       {/* Hero Section */}
