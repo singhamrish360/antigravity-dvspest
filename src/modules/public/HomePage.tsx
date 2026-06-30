@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, ChevronDown, ArrowRight, Activity, MapPin } from 'lucide-react';
+import { Star, ChevronDown, ArrowRight, Activity, MapPin, Award, Trash2 } from 'lucide-react';
 import { store } from '../../core/store';
 
 interface Props {
@@ -17,17 +17,21 @@ interface PestParticle {
   angle: number;
   color: string;
   speed: number;
+  isDead: boolean;
+  splatTime: number; // to fade out splats
 }
 
 export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [splatCount, setSplatCount] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
+  const particlesRef = useRef<PestParticle[]>([]);
 
   const services = store.getServices();
   const approvedFeedback = store.getFeedback().filter(f => f.status === 'Approved');
 
-  // Canvas interactive particle engine with 1000 bugs & cursor evasion
+  // Interactive Game Canvas: 1000 pests, Evasion & Splat on Click
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -50,6 +54,35 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Click handler to squish bugs
+    const handleCanvasClick = (e: MouseEvent) => {
+      const clickX = e.clientX;
+      const clickY = e.clientY;
+      const clickRadius = 35; // Click hit box
+
+      let squished = 0;
+      particlesRef.current.forEach(p => {
+        if (!p.isDead) {
+          const dx = p.x - clickX;
+          const dy = p.y - clickY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < clickRadius) {
+            p.isDead = true;
+            p.vx = 0;
+            p.vy = 0;
+            p.splatTime = Date.now();
+            squished++;
+          }
+        }
+      });
+
+      if (squished > 0) {
+        setSplatCount(prev => prev + squished);
+        store.logAudit('PESTS_SQUISHED_GAME', 'Interactive Game', `User exterminated ${squished} bugs in background sandbox`);
+      }
+    };
+    window.addEventListener('mousedown', handleCanvasClick);
+
     // Initializing 1000 pests
     const pestTypes: Array<'cockroach' | 'rodent' | 'mosquito' | 'termite'> = ['cockroach', 'rodent', 'mosquito', 'termite'];
     const colors = {
@@ -59,12 +92,12 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
       termite: '#e6c280'    // Amber Wood Gold
     };
 
-    const particles: PestParticle[] = [];
+    const tempParticles: PestParticle[] = [];
     const particleCount = 1000;
 
     for (let i = 0; i < particleCount; i++) {
       const type = pestTypes[Math.floor(Math.random() * pestTypes.length)];
-      particles.push({
+      tempParticles.push({
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 1.5,
@@ -73,22 +106,48 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
         size: type === 'rodent' ? 8 + Math.random() * 4 : 4 + Math.random() * 3,
         angle: Math.random() * Math.PI * 2,
         color: colors[type],
-        speed: type === 'mosquito' ? 2.5 : type === 'cockroach' ? 1.8 : 1.2
+        speed: type === 'mosquito' ? 2.5 : type === 'cockroach' ? 1.8 : 1.2,
+        isDead: false,
+        splatTime: 0
       });
     }
+    particlesRef.current = tempParticles;
 
     const drawBug = (ctx: CanvasRenderingContext2D, p: PestParticle) => {
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.angle);
+
+      if (p.isDead) {
+        // Render squished bug / splat puddle
+        const timePassed = Date.now() - p.splatTime;
+        const opacity = Math.max(0, 1 - timePassed / 15000); // Fades out over 15 seconds
+
+        ctx.fillStyle = p.type === 'cockroach' ? `rgba(139, 69, 19, ${opacity * 0.7})` : `rgba(105, 105, 105, ${opacity * 0.7})`;
+        ctx.beginPath();
+        // Irregular splat puddle
+        ctx.arc(0, 0, p.size * 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Small splat droplets
+        for (let j = 0; j < 5; j++) {
+          const dropAngle = (j * Math.PI * 2) / 5;
+          const dist = p.size * 1.3;
+          ctx.beginPath();
+          ctx.arc(Math.cos(dropAngle) * dist, Math.sin(dropAngle) * dist, p.size * 0.3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+        return;
+      }
+
       ctx.fillStyle = p.color;
 
       if (p.type === 'cockroach') {
-        // Cockroach: Oval body, antenna, and legs
+        // Cockroach: Oval body, legs, antenna
         ctx.beginPath();
         ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
         ctx.fill();
-        // Legs
         ctx.strokeStyle = p.color;
         ctx.lineWidth = 1;
         for (let i = -1; i <= 1; i++) {
@@ -99,7 +158,6 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
           ctx.lineTo(i * 3 + (i * 2), p.size);
           ctx.stroke();
         }
-        // Antenna
         ctx.beginPath();
         ctx.moveTo(p.size, -1);
         ctx.lineTo(p.size * 1.8, -p.size * 0.7);
@@ -108,18 +166,16 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
         ctx.stroke();
 
       } else if (p.type === 'rodent') {
-        // Rodent: teardrop body, ears, and long tail
+        // Rodent: Body, tail, ears
         ctx.beginPath();
         ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
         ctx.fill();
-        // Tail
         ctx.beginPath();
-        ctx.strokeStyle = '#e9a1a1'; // Pinkish Tail
+        ctx.strokeStyle = '#e9a1a1';
         ctx.lineWidth = 1.2;
         ctx.moveTo(-p.size, 0);
         ctx.quadraticCurveTo(-p.size * 1.5, Math.sin(Date.now() * 0.01) * 3, -p.size * 2, 0);
         ctx.stroke();
-        // Ears
         ctx.fillStyle = p.color;
         ctx.beginPath();
         ctx.arc(p.size * 0.3, -p.size * 0.4, 2, 0, Math.PI * 2);
@@ -127,17 +183,15 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
         ctx.fill();
 
       } else if (p.type === 'mosquito') {
-        // Mosquito: Small body, long legs, and white translucent wings
+        // Mosquito: body, proboscis, wings
         ctx.beginPath();
         ctx.arc(0, 0, p.size * 0.6, 0, Math.PI * 2);
         ctx.fill();
-        // Proboscis
         ctx.beginPath();
         ctx.strokeStyle = p.color;
         ctx.moveTo(0, 0);
         ctx.lineTo(p.size * 1.5, 0);
         ctx.stroke();
-        // Wings
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.beginPath();
         ctx.ellipse(0, -p.size * 0.4, p.size * 0.8, p.size * 0.3, -Math.PI / 4, 0, Math.PI * 2);
@@ -145,7 +199,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
         ctx.fill();
 
       } else if (p.type === 'termite') {
-        // Termite: Segmented body
+        // Termite: segmented
         ctx.beginPath();
         ctx.arc(-p.size * 0.4, 0, p.size * 0.4, 0, Math.PI * 2);
         ctx.arc(0, 0, p.size * 0.3, 0, Math.PI * 2);
@@ -160,45 +214,45 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
       ctx.clearRect(0, 0, width, height);
 
       const mouse = mouseRef.current;
-      const evasionRadius = 150;
-      const evasionForce = 4.5;
+      const evasionRadius = 160;
+      const evasionForce = 5.5;
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
+      for (let i = 0; i < particlesRef.current.length; i++) {
+        const p = particlesRef.current[i];
 
-        // Evasion logic: Vector from mouse to particle
+        if (p.isDead) {
+          drawBug(ctx, p);
+          continue;
+        }
+
+        // Evasion logic from cursor
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < evasionRadius) {
-          // Push away quickly
           const force = (evasionRadius - dist) / evasionRadius;
           const angle = Math.atan2(dy, dx);
           p.vx += Math.cos(angle) * force * evasionForce;
           p.vy += Math.sin(angle) * force * evasionForce;
-          p.angle = angle; // Point direction of escape
+          p.angle = angle;
         } else {
-          // Normal behavior: wander slightly
           p.vx += (Math.random() - 0.5) * 0.3;
           p.vy += (Math.random() - 0.5) * 0.3;
 
-          // Drag/damping to maintain normal speed
           const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
           if (speed > p.speed) {
-            p.vx *= 0.92;
-            p.vy *= 0.92;
+            p.vx *= 0.91;
+            p.vy *= 0.91;
           }
           if (speed > 0.1) {
             p.angle = Math.atan2(p.vy, p.vx);
           }
         }
 
-        // Apply movement
         p.x += p.vx;
         p.y += p.vy;
 
-        // Screen boundary wrap-around
         if (p.x < -20) p.x = width + 20;
         if (p.x > width + 20) p.x = -20;
         if (p.y < -20) p.y = height + 20;
@@ -215,6 +269,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleCanvasClick);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -241,7 +296,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem', paddingBottom: '4rem', position: 'relative' }}>
       
-      {/* High-Performance Canvas Interactive Pest System */}
+      {/* High-Performance Game Canvas */}
       <canvas
         ref={canvasRef}
         style={{
@@ -250,11 +305,34 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
           left: 0,
           width: '100%',
           height: '100%',
-          pointerEvents: 'none',
           zIndex: 1,
-          opacity: 0.42
+          cursor: 'crosshair',
+          opacity: 0.5
         }}
       />
+
+      {/* Floating Extermination Score Badge */}
+      {splatCount > 0 && (
+        <div style={{
+          position: 'fixed',
+          top: '90px',
+          right: '2rem',
+          zIndex: 100,
+          background: 'var(--gradient-brand)',
+          color: '#fff',
+          padding: '0.65rem 1.25rem',
+          borderRadius: 'var(--radius-full)',
+          fontWeight: 800,
+          fontSize: '0.95rem',
+          boxShadow: 'var(--shadow-lg)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          <Award size={18} /> Pests Exterminated: {splatCount}
+        </div>
+      )}
 
       {/* Hero Section */}
       <section style={{ position: 'relative', padding: '5rem 1.5rem', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', border: '1px solid var(--bg-glass-border)', boxShadow: 'var(--shadow-md)', zIndex: 3 }}>
