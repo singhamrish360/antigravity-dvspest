@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, ChevronDown, ArrowRight, Activity, MapPin } from 'lucide-react';
 import { store } from '../../core/store';
 
@@ -7,11 +7,217 @@ interface Props {
   onServicesClick: () => void;
 }
 
+interface PestParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  type: 'cockroach' | 'rodent' | 'mosquito' | 'termite';
+  size: number;
+  angle: number;
+  color: string;
+  speed: number;
+}
+
 export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
   const services = store.getServices();
   const approvedFeedback = store.getFeedback().filter(f => f.status === 'Approved');
+
+  // Canvas interactive particle engine with 1000 bugs & cursor evasion
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Initializing 1000 pests
+    const pestTypes: Array<'cockroach' | 'rodent' | 'mosquito' | 'termite'> = ['cockroach', 'rodent', 'mosquito', 'termite'];
+    const colors = {
+      cockroach: '#a0522d', // Reddish Brown
+      rodent: '#696969',    // Slate Grey
+      mosquito: '#1c1c1c',  // Charcoal Black
+      termite: '#e6c280'    // Amber Wood Gold
+    };
+
+    const particles: PestParticle[] = [];
+    const particleCount = 1000;
+
+    for (let i = 0; i < particleCount; i++) {
+      const type = pestTypes[Math.floor(Math.random() * pestTypes.length)];
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5,
+        type,
+        size: type === 'rodent' ? 8 + Math.random() * 4 : 4 + Math.random() * 3,
+        angle: Math.random() * Math.PI * 2,
+        color: colors[type],
+        speed: type === 'mosquito' ? 2.5 : type === 'cockroach' ? 1.8 : 1.2
+      });
+    }
+
+    const drawBug = (ctx: CanvasRenderingContext2D, p: PestParticle) => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+
+      if (p.type === 'cockroach') {
+        // Cockroach: Oval body, antenna, and legs
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Legs
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 1;
+        for (let i = -1; i <= 1; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * 3, 0);
+          ctx.lineTo(i * 3 + (i * 2), -p.size);
+          ctx.moveTo(i * 3, 0);
+          ctx.lineTo(i * 3 + (i * 2), p.size);
+          ctx.stroke();
+        }
+        // Antenna
+        ctx.beginPath();
+        ctx.moveTo(p.size, -1);
+        ctx.lineTo(p.size * 1.8, -p.size * 0.7);
+        ctx.moveTo(p.size, 1);
+        ctx.lineTo(p.size * 1.8, p.size * 0.7);
+        ctx.stroke();
+
+      } else if (p.type === 'rodent') {
+        // Rodent: teardrop body, ears, and long tail
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Tail
+        ctx.beginPath();
+        ctx.strokeStyle = '#e9a1a1'; // Pinkish Tail
+        ctx.lineWidth = 1.2;
+        ctx.moveTo(-p.size, 0);
+        ctx.quadraticCurveTo(-p.size * 1.5, Math.sin(Date.now() * 0.01) * 3, -p.size * 2, 0);
+        ctx.stroke();
+        // Ears
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.size * 0.3, -p.size * 0.4, 2, 0, Math.PI * 2);
+        ctx.arc(p.size * 0.3, p.size * 0.4, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+      } else if (p.type === 'mosquito') {
+        // Mosquito: Small body, long legs, and white translucent wings
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+        // Proboscis
+        ctx.beginPath();
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(p.size * 1.5, 0);
+        ctx.stroke();
+        // Wings
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.beginPath();
+        ctx.ellipse(0, -p.size * 0.4, p.size * 0.8, p.size * 0.3, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(0, p.size * 0.4, p.size * 0.8, p.size * 0.3, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+
+      } else if (p.type === 'termite') {
+        // Termite: Segmented body
+        ctx.beginPath();
+        ctx.arc(-p.size * 0.4, 0, p.size * 0.4, 0, Math.PI * 2);
+        ctx.arc(0, 0, p.size * 0.3, 0, Math.PI * 2);
+        ctx.arc(p.size * 0.4, 0, p.size * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    };
+
+    const update = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      const mouse = mouseRef.current;
+      const evasionRadius = 150;
+      const evasionForce = 4.5;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        // Evasion logic: Vector from mouse to particle
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < evasionRadius) {
+          // Push away quickly
+          const force = (evasionRadius - dist) / evasionRadius;
+          const angle = Math.atan2(dy, dx);
+          p.vx += Math.cos(angle) * force * evasionForce;
+          p.vy += Math.sin(angle) * force * evasionForce;
+          p.angle = angle; // Point direction of escape
+        } else {
+          // Normal behavior: wander slightly
+          p.vx += (Math.random() - 0.5) * 0.3;
+          p.vy += (Math.random() - 0.5) * 0.3;
+
+          // Drag/damping to maintain normal speed
+          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > p.speed) {
+            p.vx *= 0.92;
+            p.vy *= 0.92;
+          }
+          if (speed > 0.1) {
+            p.angle = Math.atan2(p.vy, p.vx);
+          }
+        }
+
+        // Apply movement
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Screen boundary wrap-around
+        if (p.x < -20) p.x = width + 20;
+        if (p.x > width + 20) p.x = -20;
+        if (p.y < -20) p.y = height + 20;
+        if (p.y > height + 20) p.y = -20;
+
+        drawBug(ctx, p);
+      }
+
+      animationFrameId = requestAnimationFrame(update);
+    };
+
+    update();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   const faqs = [
     {
@@ -35,32 +241,23 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem', paddingBottom: '4rem', position: 'relative' }}>
       
-      {/* Drastically Populated Moving Pests Background Animation Layer with realistic styling */}
-      <div className="pest-bg-overlay">
-        {/* Cockroaches */}
-        <div className="crawling-pest bug-cockroach pest-c1">🪳</div>
-        <div className="crawling-pest bug-cockroach pest-c2">🪳</div>
-        <div className="crawling-pest bug-cockroach pest-c3">🪳</div>
-
-        {/* Rodents */}
-        <div className="crawling-pest bug-rodent pest-r1">🐀</div>
-        <div className="crawling-pest bug-rodent pest-r2">🐀</div>
-        <div className="crawling-pest bug-rodent pest-r3">🐀</div>
-
-        {/* Mosquitoes */}
-        <div className="crawling-pest bug-mosquito pest-m1">🦟</div>
-        <div className="crawling-pest bug-mosquito pest-m2">🦟</div>
-        <div className="crawling-pest bug-mosquito pest-m3">🦟</div>
-
-        {/* Termites */}
-        <div className="crawling-pest bug-termite pest-t1">🐜</div>
-        <div className="crawling-pest bug-termite pest-t2">🐜</div>
-        <div className="crawling-pest bug-termite pest-t3">🐜</div>
-        <div className="crawling-pest bug-termite pest-t4">🐜</div>
-      </div>
+      {/* High-Performance Canvas Interactive Pest System */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 1,
+          opacity: 0.42
+        }}
+      />
 
       {/* Hero Section */}
-      <section style={{ position: 'relative', padding: '5rem 1.5rem', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', border: '1px solid var(--bg-glass-border)', boxShadow: 'var(--shadow-md)' }}>
+      <section style={{ position: 'relative', padding: '5rem 1.5rem', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', border: '1px solid var(--bg-glass-border)', boxShadow: 'var(--shadow-md)', zIndex: 3 }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center', position: 'relative', zIndex: 3 }}>
           <div>
             <div className="badge badge-warning" style={{ marginBottom: '1.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
