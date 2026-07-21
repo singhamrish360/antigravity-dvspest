@@ -1,4 +1,4 @@
-import { auth, subscribeToAuthState } from './auth';
+import { subscribeToAuthState } from './auth';
 import { User } from 'firebase/auth';
 
 export interface UserSession {
