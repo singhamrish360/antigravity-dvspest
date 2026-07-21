@@ -24,8 +24,17 @@ export const ConsultationForm: React.FC<Props> = ({ onSuccess }) => {
 
   const services = store.getServices();
 
+  const [validationError, setValidationError] = useState('');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
+
+    if (!formData.email.trim() && !formData.phone.trim()) {
+      setValidationError('Please provide either an Email Address or a Mobile Phone Number so we can contact you.');
+      return;
+    }
+
     const newLead = store.addLead({
       customerName: formData.customerName,
       email: formData.email,
@@ -152,6 +161,13 @@ export const ConsultationForm: React.FC<Props> = ({ onSuccess }) => {
 
       {step === 2 && (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          
+          {validationError && (
+            <div className="badge badge-danger" style={{ padding: '0.75rem', display: 'block', textAlign: 'center', marginBottom: '0.5rem' }}>
+              ⚠️ {validationError}
+            </div>
+          )}
+
           <div className="form-group">
             <label className="form-label">Full Name</label>
             <input
@@ -166,10 +182,9 @@ export const ConsultationForm: React.FC<Props> = ({ onSuccess }) => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label className="form-label">Email Address (Optional)</label>
               <input
                 type="email"
-                required
                 className="form-control"
                 placeholder="e.g. ramesh@gmail.com"
                 value={formData.email}
@@ -178,10 +193,9 @@ export const ConsultationForm: React.FC<Props> = ({ onSuccess }) => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Mobile Phone Number</label>
+              <label className="form-label">Mobile Phone Number (Optional)</label>
               <input
                 type="tel"
-                required
                 className="form-control"
                 placeholder="+91 98390 00000"
                 value={formData.phone}
