@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { store } from '../../core/store';
 import { Plus, Edit, Check, X } from 'lucide-react';
-import { FeedbackStatus } from '../../core/types';
+import { FeedbackStatus, Customer } from '../../core/types';
+import { CustomerDirectory } from '../crm/CustomerDirectory';
+import { CustomerProfileDetail } from '../crm/CustomerProfileDetail';
+import { LeadPipeline } from '../crm/LeadPipeline';
 
 interface Props {
   activeModule: string;
@@ -9,42 +12,39 @@ interface Props {
 
 export const AdminModulesManager: React.FC<Props> = ({ activeModule }) => {
   const [, setRefreshKey] = useState(0);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  
   const triggerRefresh = () => setRefreshKey(prev => prev + 1);
 
-  // Module 1: Customers Management
+  // Module 1: Customers Master Database (CRM Integration)
   if (activeModule === 'customers') {
-    const customers = store.getCustomers();
     return (
-      <div className="glass-panel" style={{ padding: '2rem', background: '#ffffff' }}>
-        <h2 style={{ marginBottom: '1.5rem' }}>Customers Management Module</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
-            <thead>
-              <tr style={{ background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--bg-glass-border)' }}>
-                <th style={{ padding: '0.85rem' }}>ID</th>
-                <th style={{ padding: '0.85rem' }}>Customer Name</th>
-                <th style={{ padding: '0.85rem' }}>Email & Phone</th>
-                <th style={{ padding: '0.85rem' }}>LTV</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.map(c => (
-                <tr key={c.id} style={{ borderBottom: '1px solid var(--bg-glass-border)' }}>
-                  <td style={{ padding: '0.85rem' }}>{c.id}</td>
-                  <td style={{ padding: '0.85rem', fontWeight: 700 }}>{c.fullName}</td>
-                  <td style={{ padding: '0.85rem' }}>{c.email} • {c.phone}</td>
-                  <td style={{ padding: '0.85rem', color: 'var(--accent-secondary)', fontWeight: 800 }}>₹{c.lifetimeValue.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="glass-panel" style={{ background: '#ffffff', minHeight: '500px' }}>
+        {selectedCustomer ? (
+          <CustomerProfileDetail 
+            customer={selectedCustomer} 
+            onBack={() => setSelectedCustomer(null)} 
+          />
+        ) : (
+          <CustomerDirectory 
+            onSelectCustomer={(cust) => setSelectedCustomer(cust)} 
+          />
+        )}
       </div>
     );
   }
 
-  // Module 2 & 3: Leads & Service Requests
-  if (activeModule === 'leads' || activeModule === 'requests') {
+  // Module 2: Lead Pipeline Kanban (CRM Integration)
+  if (activeModule === 'leads') {
+    return (
+      <div className="glass-panel" style={{ background: '#ffffff', minHeight: '500px' }}>
+        <LeadPipeline />
+      </div>
+    );
+  }
+
+  // Module 3: Service Requests
+  if (activeModule === 'requests') {
     const leads = store.getLeads();
     return (
       <div className="glass-panel" style={{ padding: '2rem', background: '#ffffff' }}>

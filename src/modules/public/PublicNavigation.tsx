@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, LayoutDashboard, UserCheck, Bot } from 'lucide-react';
+import { Shield, LayoutDashboard, Bot } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
 
 interface Props {
@@ -60,10 +60,6 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button className="btn btn-outline btn-sm" onClick={() => setMode('ai')}>
             <Bot size={16} /> AI Pest Scan
-          </button>
-
-          <button className="btn btn-secondary btn-sm" onClick={() => setMode('crm')}>
-            <UserCheck size={16} /> CRM Portal
           </button>
 
           <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
