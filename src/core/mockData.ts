@@ -123,7 +123,7 @@ export const initialServices: ServiceItem[] = [
     description: 'Odorless herbal gel application and targeted micro-encapsulated spray to eradicate German and American cockroaches completely.',
     basePrice: 1499,
     durationMinutes: 60,
-    imageUrl: 'https://images.unsplash.com/photo-1626509653195-a820c976026d?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80',
     isPopular: true,
     features: [
       'Odorless & eco-friendly herbal gel treatment',
@@ -139,7 +139,7 @@ export const initialServices: ServiceItem[] = [
     description: 'Comprehensive rat and mouse eradication using tamper-proof bait stations, acoustic sensors, and structural entry sealing.',
     basePrice: 1999,
     durationMinutes: 90,
-    imageUrl: 'https://images.unsplash.com/photo-1605092676920-8ac5ae40c7c8?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=600&q=80',
     isPopular: true,
     features: [
       'Heavy-duty wire mesh entry-point sealing',
@@ -155,7 +155,7 @@ export const initialServices: ServiceItem[] = [
     description: 'Cold thermal fogging and anti-larval chemical treatment in drains and standing water to protect against Dengue and Malaria.',
     basePrice: 1299,
     durationMinutes: 45,
-    imageUrl: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1502224562085-639556652f33?auto=format&fit=crop&w=600&q=80',
     features: [
       'Outdoor thermal fogging misting',
       'Drain & water tank anti-larval granules',
@@ -170,7 +170,7 @@ export const initialServices: ServiceItem[] = [
     description: 'Drill-Fill-Seal chemical barrier protection along walls and foundations to eliminate termite colonies at the root.',
     basePrice: 6500,
     durationMinutes: 240,
-    imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80',
     isPopular: true,
     features: [
       'Thermal imaging moisture detection sweep',
@@ -186,7 +186,7 @@ export const initialServices: ServiceItem[] = [
     description: 'Specialized gas fumigation for warehouses, food processing units, grains, and shipping containers compliant with plant quarantine.',
     basePrice: 8500,
     durationMinutes: 300,
-    imageUrl: 'https://images.unsplash.com/photo-1584483777133-3857445c3293?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
     features: [
       'Phosphine / Methyl Bromide gas fumigation',
       'FSSAI & Plant Quarantine clearance certificates',
