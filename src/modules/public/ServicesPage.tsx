@@ -138,7 +138,27 @@ export const ServicesPage: React.FC<Props> = ({ onBookClick }) => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
         {services.map(srv => (
           <div key={srv.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
-            <img src={srv.imageUrl} alt={srv.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem' }} />
+            
+            {srv.id === 'SRV-101' || srv.id === 'SRV-102' || srv.id === 'SRV-103' || srv.id === 'SRV-104' || srv.id === 'SRV-105' ? (
+              <div style={{ 
+                width: '100%', 
+                height: '240px', 
+                borderRadius: 'var(--radius-sm)', 
+                marginBottom: '1.5rem',
+                backgroundImage: 'url(/services-grid.jpg)',
+                backgroundSize: '205% 205%',
+                backgroundPosition: 
+                  srv.id === 'SRV-101' ? '0% 0%' : // Top Left (Cockroaches)
+                  srv.id === 'SRV-102' ? '100% 0%' : // Top Right (Rodents)
+                  srv.id === 'SRV-103' ? '0% 100%' : // Bottom Left (Mosquitoes)
+                  srv.id === 'SRV-104' ? '100% 100%' : // Bottom Right (Termites)
+                  '0% 100%', // Bottom Left for fumigation
+                boxShadow: 'inset 0 0 10px rgba(0,0,0,0.05)',
+                border: '1px solid var(--bg-glass-border)'
+              }} />
+            ) : (
+              <img src={srv.imageUrl} alt={srv.title} style={{ width: '100%', height: '240px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem' }} />
+            )}
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <span className="badge badge-info">{srv.category}</span>
