@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+  <!-- Background Shield shape -->
+  <path d="M50 5 L85 20 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V20 L50 5 Z" fill="url(#gold-grad)" />
+  <!-- Inner Detail Shield -->
+  <path d="M50 12 L77 24 V48 C77 64 50 80 50 80 C50 80 23 64 23 48 V24 L50 12 Z" fill="#faf8f5" />
+  <!-- Center Checkmark / Star -->
+  <path d="M43 55 L35 47 L30 52 L43 65 L70 38 L65 33 Z" fill="url(#gold-grad)" />
+</svg>
