@@ -61,13 +61,24 @@ export const seedFirestoreIfEmpty = async () => {
       console.log('🌱 Firestore System Settings seeded successfully.');
     }
 
-    // 2. Seed Services
-    const servicesSnapshot = await getDocs(query(colRefs.services, limit(1)));
+    // 2. Seed/Sync Services
+    const servicesSnapshot = await getDocs(colRefs.services);
     if (servicesSnapshot.empty) {
       for (const service of initialServices) {
         await setFirestoreDocument('services', service.id, service);
       }
       console.log('🌱 Firestore Services collection seeded successfully.');
+    } else {
+      // Sync latest image assets and titles directly to the active Firestore documents
+      for (const service of initialServices) {
+        await setFirestoreDocument('services', service.id, {
+          imageUrl: service.imageUrl,
+          title: service.title,
+          category: service.category,
+          description: service.description
+        });
+      }
+      console.log('🌱 Firestore Services collection synchronized with latest assets.');
     }
 
     // 3. Seed Customers
