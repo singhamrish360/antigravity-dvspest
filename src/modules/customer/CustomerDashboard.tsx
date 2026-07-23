@@ -439,7 +439,7 @@ export const CustomerDashboard: React.FC<Props> = ({ setMode }) => {
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'right' }}>Status</div>
                           <span className={`badge ${
                             booking.status === 'Completed' ? 'badge-success' : 
-                            booking.status === 'Scheduled' || booking.status === 'In Progress' ? 'badge-info' : 
+                            booking.status === 'Scheduled' || (booking.status as string) === 'In Progress' ? 'badge-info' : 
                             'badge-warning'
                           }`}>
                             {booking.status}
