@@ -8,7 +8,7 @@ export const AdminOverview: React.FC = () => {
   const history = store.getServiceHistory();
   const auditLogs = store.getAuditLogs();
 
-  const totalRevenue = history.reduce((acc, curr) => acc + curr.amountCharged, 0) + 185000;
+  const totalRevenue = history.reduce((acc, curr) => acc + curr.amountCharged, 0);
   const activeLeads = leads.filter(l => l.status !== 'Closed' && l.status !== 'Cancelled').length;
 
   return (
