@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 export interface UserSession {
   userId: string;
   userName: string;
-  userRole: 'Administrator' | 'Field Technician' | 'Support Specialist';
+  userRole: 'Administrator' | 'Customer' | 'Field Technician' | 'Support Specialist';
   isAuthenticated: boolean;
   is2FAVerified: boolean;
   loginTime: string;
@@ -28,10 +28,12 @@ class SecurityManager {
     // Subscribe to Firebase Authentication state updates
     subscribeToAuthState((user: User | null) => {
       if (user) {
+        // Map users with admin email to Administrator role, else Customer
+        const isAdmin = user.email === 'admin@dvspestcontrol.in' || user.email === 'dvsinfrapest@gmail.com';
         this.currentSession = {
           userId: user.uid,
           userName: user.displayName || user.email?.split('@')[0] || 'Authenticated User',
-          userRole: 'Administrator', // Defaulting to Admin for SaaS panel access
+          userRole: isAdmin ? 'Administrator' : 'Customer',
           isAuthenticated: true,
           is2FAVerified: !!user.phoneNumber, // Phone authenticated users are pre-2FA verified
           loginTime: new Date().toISOString(),
@@ -75,7 +77,7 @@ class SecurityManager {
     this.notify();
   }
 
-  public hasPermission(requiredRole: 'Administrator' | 'Field Technician' | 'Support Specialist'): boolean {
+  public hasPermission(requiredRole: 'Administrator' | 'Customer' | 'Field Technician' | 'Support Specialist'): boolean {
     if (this.currentSession.userRole === 'Administrator') return true;
     return this.currentSession.userRole === requiredRole;
   }

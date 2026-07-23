@@ -11,6 +11,7 @@ import { CustomerDirectory } from './modules/crm/CustomerDirectory';
 import { CustomerProfileDetail } from './modules/crm/CustomerProfileDetail';
 import { LeadPipeline } from './modules/crm/LeadPipeline';
 import { AdminLayout } from './modules/admin/AdminLayout';
+import { CustomerDashboard } from './modules/customer/CustomerDashboard';
 import { PestRecognitionAI } from './modules/ai/PestRecognitionAI';
 import { AIChatbotWidget } from './modules/ai/AIChatbotWidget';
 import { LoginGate } from './modules/admin/LoginGate';
@@ -81,9 +82,13 @@ export const App: React.FC = () => {
         </>
       )}
 
-      {/* Mode 2: Administrator SaaS Dashboard */}
+      {/* Mode 2: SaaS Dashboard (Admin or Customer Portal depending on Role) */}
       {mode === 'admin' && (
-        <AdminLayout setMode={handleModeChange} />
+        session.userRole === 'Administrator' ? (
+          <AdminLayout setMode={handleModeChange} />
+        ) : (
+          <CustomerDashboard setMode={handleModeChange} />
+        )
       )}
 
       {/* Mode 4: AI Diagnostic Studio */}

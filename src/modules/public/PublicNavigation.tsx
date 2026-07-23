@@ -1,6 +1,7 @@
-import React from 'react';
-import { Shield, LayoutDashboard, Bot } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Shield, LayoutDashboard, Bot, LogIn } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
+import { security } from '../../core/security';
 
 interface Props {
   activeView: string;
@@ -9,6 +10,16 @@ interface Props {
 }
 
 export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, setMode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(security.getSession().isAuthenticated);
+
+  useEffect(() => {
+    // Sync session state changes
+    const unsubscribe = security.subscribe(() => {
+      setIsAuthenticated(security.getSession().isAuthenticated);
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
@@ -62,9 +73,15 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             <Bot size={16} /> AI Pest Scan
           </button>
 
-          <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
-            <LayoutDashboard size={16} /> Admin SaaS
-          </button>
+          {isAuthenticated ? (
+            <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
+              <LayoutDashboard size={16} /> My Dashboard
+            </button>
+          ) : (
+            <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
+              <LogIn size={16} /> Login
+            </button>
+          )}
         </div>
 
       </div>
