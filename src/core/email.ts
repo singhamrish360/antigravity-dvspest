@@ -17,7 +17,7 @@ export interface LeadEmailPayload {
 }
 
 /**
- * Dispatches an automated email notification to the administrator (singhamrish360@gmail.com)
+ * Dispatches an automated email notification to the administrator (dvsinfrapest@gmail.com)
  * detailing the new customer inspection request.
  */
 export const sendLeadNotificationEmail = async (lead: LeadEmailPayload): Promise<boolean> => {
@@ -27,7 +27,7 @@ export const sendLeadNotificationEmail = async (lead: LeadEmailPayload): Promise
   const PUBLIC_KEY = 'AIzaSy_Placeholder_EmailJS_Key';
 
   const templateParams = {
-    to_email: 'singhamrish360@gmail.com',
+    to_email: 'dvsinfrapest@gmail.com',
     lead_id: lead.id,
     customer_name: lead.customerName,
     customer_email: lead.email || 'Not Provided',
@@ -57,7 +57,7 @@ export const sendLeadNotificationEmail = async (lead: LeadEmailPayload): Promise
     });
 
     if (response.ok) {
-      console.log('✅ DVS Lead email notification sent successfully to singhamrish360@gmail.com.');
+      console.log('✅ DVS Lead email notification sent successfully to dvsinfrapest@gmail.com.');
       return true;
     } else {
       const errorText = await response.text();
