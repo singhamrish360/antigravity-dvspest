@@ -78,13 +78,14 @@ export const seedFirestoreIfEmpty = async () => {
       console.log('🌱 Firestore Services collection synchronized with latest assets.');
     }
 
-    // 3. Seed Customers
-    const customersSnapshot = await getDocs(query(colRefs.customers, limit(1)));
-    if (customersSnapshot.empty) {
-      for (const customer of initialCustomers) {
-        await setFirestoreDocument('customers', customer.id, customer);
-      }
-      console.log('🌱 Firestore Customers collection seeded successfully.');
+    // 3. Clear Mock Customers
+    try {
+      await deleteDoc(doc(db, 'customers', 'DVS-CUST-1001'));
+      await deleteDoc(doc(db, 'customers', 'DVS-CUST-1002'));
+      await deleteDoc(doc(db, 'customers', 'DVS-CUST-1003'));
+      console.log('🧹 Cleared mock customers from Firestore.');
+    } catch (e) {
+      console.warn('Mock customers cleanup failed:', e);
     }
 
     // 4. Clear Mock/Test Leads
