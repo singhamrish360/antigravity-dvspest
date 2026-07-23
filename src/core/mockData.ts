@@ -89,67 +89,13 @@ export const initialServices: ServiceItem[] = [
   }
 ];
 
-export const initialServiceHistory: ServiceHistoryRecord[] = [
-  {
-    id: 'HIST-901',
-    customerId: 'DVS-CUST-1001',
-    customerName: 'Rajesh Sharma',
-    serviceTitle: 'Advanced Cockroaches Control',
-    technicianName: 'Vram Singh (EMP-101)',
-    date: '2026-05-14',
-    status: 'Completed',
-    beforeImages: [
-      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80'
-    ],
-    afterImages: [
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'
-    ],
-    technicianNotes: 'Applied herbal gel in all kitchen cabinets and drain outlets. Client satisfied.',
-    amountCharged: 1499
-  }
-];
+export const initialServiceHistory: ServiceHistoryRecord[] = [];
 
-export const initialQuotes: QuotationRecord[] = [
-  {
-    id: 'QUOTE-401',
-    leadId: 'LEAD-2026-8941',
-    customerName: 'Sanjay Gupta',
-    serviceTitle: 'Subterranean Termites Control Shield',
-    amount: 9500,
-    tax: 1710,
-    totalAmount: 11210,
-    status: 'Approved',
-    generatedDate: '2026-06-28',
-    validUntil: '2026-07-28'
-  }
-];
+export const initialQuotes: QuotationRecord[] = [];
 
-export const initialAMCs: AMCRecord[] = [
-  {
-    id: 'AMC-701',
-    customerId: 'DVS-CUST-1001',
-    customerName: 'Rajesh Sharma',
-    servicePackage: 'Annual Commercial Pest AMC',
-    startDate: '2025-11-15',
-    endDate: '2026-11-14',
-    visitsPerYear: 6,
-    visitsCompleted: 3,
-    status: 'Active',
-    contractValue: 12000
-  }
-];
+export const initialAMCs: AMCRecord[] = [];
 
-export const initialWarranties: WarrantyRecord[] = [
-  {
-    id: 'WAR-301',
-    customerId: 'DVS-CUST-1002',
-    serviceTitle: 'Subterranean Termites Control Shield',
-    warrantyPeriodMonths: 60,
-    startDate: '2026-01-20',
-    expiryDate: '2031-01-20',
-    status: 'Valid'
-  }
-];
+export const initialWarranties: WarrantyRecord[] = [];
 
 export const initialFeedback: FeedbackRecord[] = [
   {
