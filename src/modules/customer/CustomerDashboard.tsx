@@ -85,7 +85,10 @@ export const CustomerDashboard: React.FC<Props> = ({ setMode }) => {
       propertyType: propertyType as any,
       squareFeet: Number(squareFeet),
       location: location,
-      referralSource: referral
+      referralSource: referral,
+      ipAddress: '192.168.1.1',
+      deviceInfo: navigator.userAgent.includes('Mobile') ? 'Mobile Device' : 'Desktop Workstation',
+      browserInfo: navigator.userAgent.split(' ')[0]
     });
     setGeneratedLeadId(newLead.id);
     setBookingSuccess(true);
