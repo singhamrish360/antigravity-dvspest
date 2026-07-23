@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, ChevronDown, ArrowRight, Activity, MapPin, Award, Trash2 } from 'lucide-react';
 import { store } from '../../core/store';
+import { SpaceTelemetryCanvas } from './SpaceTelemetryCanvas';
 
 interface Props {
   onBookClick: () => void;
@@ -374,20 +375,16 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', background: '#ffffff', boxShadow: 'var(--shadow-lg)' }}>
-              <img
-                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
-                alt="DVS Pest Control Inspection"
-                style={{ width: '100%', height: '360px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
-              />
-              <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', right: '2rem' }} className="glass-panel">
-                <div style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(255,255,255,0.95)' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', background: '#090d16', boxShadow: 'var(--shadow-lg)', border: '1px solid #1e293b' }}>
+              <SpaceTelemetryCanvas />
+              <div style={{ position: 'absolute', bottom: '2.2rem', left: '2.2rem', right: '2.2rem' }} className="glass-panel">
+                <div style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(9, 13, 22, 0.95)', border: '1px solid var(--accent-primary)' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                     <Activity size={20} />
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Lucknow Dispatch Telemetry</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Active pest control teams deployed in Hazratganj & Gomti Nagar</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#ffffff' }}>Lucknow Dispatch Telemetry</div>
+                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Active orbital scanning & dispatch lines in Hazratganj & Gomti Nagar</div>
                   </div>
                 </div>
               </div>
