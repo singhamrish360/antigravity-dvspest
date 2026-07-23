@@ -82,6 +82,14 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               <LogIn size={16} /> Login
             </button>
           )}
+
+          <button 
+            className="btn btn-outline btn-sm" 
+            style={{ borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)', padding: '0.4rem 0.75rem' }}
+            onClick={() => { setActiveView('infrastructure'); setMode('public'); }}
+          >
+            Our Infrastructure Page
+          </button>
         </div>
 
       </div>
