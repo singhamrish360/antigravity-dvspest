@@ -87,13 +87,14 @@ export const seedFirestoreIfEmpty = async () => {
       console.log('🌱 Firestore Customers collection seeded successfully.');
     }
 
-    // 4. Seed Leads
-    const leadsSnapshot = await getDocs(query(colRefs.leads, limit(1)));
-    if (leadsSnapshot.empty) {
-      for (const lead of initialLeads) {
-        await setFirestoreDocument('leads', lead.id, lead);
-      }
-      console.log('🌱 Firestore Leads collection seeded successfully.');
+    // 4. Clear Mock/Test Leads
+    try {
+      await deleteDoc(doc(db, 'leads', 'LEAD-2026-8941'));
+      await deleteDoc(doc(db, 'leads', 'LEAD-2026-8942'));
+      await deleteDoc(doc(db, 'leads', 'LEAD-2026-4120'));
+      console.log('🧹 Cleared mock/test leads from Firestore.');
+    } catch (e) {
+      console.warn('Mock leads cleanup failed:', e);
     }
 
     // 5. Seed Feedback Reviews

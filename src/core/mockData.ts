@@ -78,42 +78,7 @@ export const initialCustomers: Customer[] = [
   }
 ];
 
-export const initialLeads: Lead[] = [
-  {
-    id: 'LEAD-2026-8941',
-    customerName: 'Sanjay Gupta',
-    email: 'sanjay.gupta@alambagh.co.in',
-    phone: '+91 93350 11223',
-    serviceRequested: 'Termites Control (Drill-Fill-Seal Barrier)',
-    propertyType: 'Residential',
-    squareFeet: 3200,
-    location: 'Alambagh, Lucknow',
-    referralSource: 'Google Search',
-    status: 'Scheduled',
-    timestamp: '2026-06-28T10:45:00Z',
-    ipAddress: '103.24.18.90',
-    deviceInfo: 'Android Smartphone',
-    browserInfo: 'Chrome Mobile 126.0',
-    assignedTechnicianId: 'EMP-102',
-    quotedAmount: 9500
-  },
-  {
-    id: 'LEAD-2026-8942',
-    customerName: 'Ananya Roy',
-    email: 'ananya@indiranagar.com',
-    phone: '+91 98380 77665',
-    serviceRequested: 'Mosquitoes Control & Fogging',
-    propertyType: 'Residential',
-    squareFeet: 2200,
-    location: 'Indira Nagar, Lucknow',
-    referralSource: 'Direct Search',
-    status: 'New',
-    timestamp: '2026-06-29T08:12:00Z',
-    ipAddress: '117.211.45.12',
-    deviceInfo: 'Windows PC',
-    browserInfo: 'Edge 125.0'
-  }
-];
+export const initialLeads: Lead[] = [];
 
 export const initialServices: ServiceItem[] = [
   {
