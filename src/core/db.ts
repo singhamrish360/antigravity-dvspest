@@ -43,6 +43,12 @@ export const updateFirestoreDocument = async (collectionName: string, docId: str
   return updateDoc(docRef, data);
 };
 
+// Delete a document from a collection
+export const deleteFirestoreDocument = async (collectionName: string, docId: string) => {
+  const docRef = doc(db, collectionName, docId);
+  return deleteDoc(docRef);
+};
+
 // Self-healing database seeder to pre-populate empty Firestore collections
 export const seedFirestoreIfEmpty = async () => {
   try {

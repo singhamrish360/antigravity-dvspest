@@ -146,28 +146,7 @@ Creating an uninterrupted chemical barrier along exterior and interior footings 
   }
 ];
 
-export const initialEmployees: Employee[] = [
-  {
-    id: 'EMP-101',
-    fullName: 'Vram Singh',
-    role: 'Field Technician',
-    email: 'vram.singh@dvspest.in',
-    phone: '+91 94150 11122',
-    assignedJobsCount: 18,
-    rating: 4.9,
-    status: 'Active'
-  },
-  {
-    id: 'EMP-102',
-    fullName: 'Ramesh Yadav',
-    role: 'Support Specialist',
-    email: 'ramesh.yadav@dvspest.in',
-    phone: '+91 98390 33344',
-    assignedJobsCount: 25,
-    rating: 5.0,
-    status: 'Active'
-  }
-];
+export const initialEmployees: Employee[] = [];
 
 export const initialAuditLogs: AuditLog[] = [
   {

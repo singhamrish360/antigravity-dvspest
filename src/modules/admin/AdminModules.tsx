@@ -78,22 +78,148 @@ export const AdminModulesManager: React.FC<Props> = ({ activeModule }) => {
   // Module 4: Employees Management
   if (activeModule === 'employees') {
     const employees = store.getEmployees();
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [editingEmp, setEditingEmp] = useState<any | null>(null);
+
+    // Form Fields
+    const [fullName, setFullName] = useState('');
+    const [role, setRole] = useState('Field Technician');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [assignedJobs, setAssignedJobs] = useState(0);
+    const [rating, setRating] = useState(5.0);
+
+    const handleOpenAdd = () => {
+      setEditingEmp(null);
+      setFullName('');
+      setRole('Field Technician');
+      setEmail('');
+      setPhone('');
+      setAssignedJobs(0);
+      setRating(5.0);
+      setIsFormOpen(true);
+    };
+
+    const handleOpenEdit = (emp: any) => {
+      setEditingEmp(emp);
+      setFullName(emp.fullName);
+      setRole(emp.role);
+      setEmail(emp.email);
+      setPhone(emp.phone);
+      setAssignedJobs(emp.assignedJobsCount);
+      setRating(emp.rating);
+      setIsFormOpen(true);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const id = editingEmp ? editingEmp.id : `EMP-${Math.floor(100 + Math.random() * 900)}`;
+      store.saveEmployee({
+        id,
+        fullName,
+        role: role as any,
+        email,
+        phone,
+        assignedJobsCount: Number(assignedJobs),
+        rating: Number(rating),
+        status: 'Active'
+      });
+      setIsFormOpen(false);
+      triggerRefresh();
+    };
+
+    const handleDelete = (id: string) => {
+      if (confirm('Are you sure you want to delete this personnel member from the DVS Roster?')) {
+        store.deleteEmployee(id);
+        triggerRefresh();
+      }
+    };
+
     return (
       <div className="glass-panel" style={{ padding: '2rem', background: '#ffffff' }}>
-        <h2 style={{ marginBottom: '1.5rem' }}>Technicians Roster & Operations</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {employees.map(emp => (
-            <div key={emp.id} className="glass-card" style={{ background: '#faf8f5' }}>
-              <span className="badge badge-info" style={{ marginBottom: '0.5rem' }}>{emp.role}</span>
-              <h3 style={{ fontSize: '1.2rem' }}>{emp.fullName}</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{emp.email} • {emp.phone}</p>
-              <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--bg-glass-border)', display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                <span>Assigned Jobs: {emp.assignedJobsCount}</span>
-                <span style={{ color: '#d97706', fontWeight: 700 }}>★ {emp.rating}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h2>Technicians Roster & Operations</h2>
+          {!isFormOpen && (
+            <button className="btn btn-primary btn-sm" onClick={handleOpenAdd}>
+              <Plus size={16} /> Add New Personnel
+            </button>
+          )}
+        </div>
+
+        {/* Form Container */}
+        {isFormOpen && (
+          <form onSubmit={handleSubmit} className="glass-card" style={{ background: 'var(--bg-secondary)', marginBottom: '2rem', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem' }}>{editingEmp ? 'Edit Personnel Member' : 'Add New Personnel Member'}</h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+              <div className="form-group">
+                <label className="form-label">Full Name</label>
+                <input type="text" className="form-control" value={fullName} onChange={e => setFullName(e.target.value)} required />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Role Category</label>
+                <select className="form-control" value={role} onChange={e => setRole(e.target.value)}>
+                  <option value="Field Technician">Field Technician</option>
+                  <option value="Support Specialist">Support Specialist</option>
+                  <option value="Administrator">Administrator</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Phone Number</label>
+                <input type="text" className="form-control" value={phone} onChange={e => setPhone(e.target.value)} required />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Assigned Jobs</label>
+                <input type="number" className="form-control" value={assignedJobs} onChange={e => setAssignedJobs(Number(e.target.value))} min="0" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Performance Rating (1.0 - 5.0)</label>
+                <input type="number" step="0.1" className="form-control" value={rating} onChange={e => setRating(Number(e.target.value))} min="1.0" max="5.0" />
               </div>
             </div>
-          ))}
-        </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <button type="button" className="btn btn-outline btn-sm" onClick={() => setIsFormOpen(false)}>Cancel</button>
+              <button type="submit" className="btn btn-primary btn-sm">Save Member</button>
+            </div>
+          </form>
+        )}
+
+        {employees.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+            No personnel registered. Click "Add New Personnel" to seed your Lucknow & UP roster!
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {employees.map(emp => (
+              <div key={emp.id} className="glass-card" style={{ background: '#faf8f5', border: '1px solid var(--bg-glass-border)' }}>
+                <span className="badge badge-info" style={{ marginBottom: '0.5rem' }}>{emp.role}</span>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>{emp.fullName}</h3>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>{emp.email}</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>{emp.phone}</p>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingTop: '0.75rem', borderTop: '1px solid var(--bg-glass-border)', marginBottom: '1.25rem' }}>
+                  <span>Assigned Jobs: <strong>{emp.assignedJobsCount}</strong></span>
+                  <span style={{ color: '#d97706', fontWeight: 700 }}>★ {emp.rating}</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                  <button className="btn btn-outline btn-sm" style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }} onClick={() => handleOpenEdit(emp)}>Edit</button>
+                  <button className="btn btn-outline btn-sm" style={{ borderColor: '#dc2626', color: '#dc2626', padding: '0.25rem 0.5rem', fontSize: '0.8rem' }} onClick={() => handleDelete(emp.id)}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

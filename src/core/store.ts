@@ -16,6 +16,7 @@ import {
   setFirestoreDocument, 
   addFirestoreDocument, 
   updateFirestoreDocument,
+  deleteFirestoreDocument,
   seedFirestoreIfEmpty 
 } from './db';
 import { sendLeadNotificationEmail } from './email';
@@ -54,6 +55,7 @@ class EnterpriseStore {
       this.leads = await getFirestoreCollection('leads');
       this.services = await getFirestoreCollection('services');
       this.feedback = await getFirestoreCollection('feedback');
+      this.employees = await getFirestoreCollection('employees');
       
       const settingsData = await getFirestoreCollection('settings');
       if (settingsData && settingsData.length > 0) {
@@ -182,6 +184,30 @@ class EnterpriseStore {
     // Sync to Firestore
     setFirestoreDocument('blogs', blog.id, blog).catch(err => console.error(err));
     this.logAudit('BLOG_SAVED', 'Blog CMS', `Saved blog article: ${blog.title}`);
+  }
+
+  // Employee Roster Actions with Firestore Sync
+  public saveEmployee(employee: Employee) {
+    const exists = this.employees.some(e => e.id === employee.id);
+    if (exists) {
+      this.employees = this.employees.map(e => e.id === employee.id ? employee : e);
+    } else {
+      this.employees = [...this.employees, employee];
+    }
+    
+    // Sync to Firestore
+    setFirestoreDocument('employees', employee.id, employee).catch(err => console.error(err));
+    this.logAudit('EMPLOYEE_SAVED', 'Employees Management', `Saved employee ${employee.fullName} (${employee.role})`);
+    this.notify();
+  }
+
+  public deleteEmployee(empId: string) {
+    this.employees = this.employees.filter(e => e.id !== empId);
+    
+    // Sync delete to Firestore
+    deleteFirestoreDocument('employees', empId).catch(err => console.error(err));
+    this.logAudit('EMPLOYEE_DELETED', 'Employees Management', `Deleted employee ${empId}`);
+    this.notify();
   }
 
   // Settings Actions with Firestore Sync
