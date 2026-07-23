@@ -72,7 +72,7 @@ export const App: React.FC = () => {
           <main style={{ flexGrow: 1, padding: '2rem 0' }}>
             {publicView === 'home' && <HomePage onBookClick={() => setPublicView('consultation')} onServicesClick={() => setPublicView('services')} />}
             {publicView === 'services' && <ServicesPage onBookClick={() => setPublicView('consultation')} />}
-            {publicView === 'consultation' && <ConsultationForm onSuccess={() => handleModeChange('admin')} />}
+            {publicView === 'consultation' && <ConsultationForm />}
             {publicView === 'blogs' && <BlogsPage />}
             {publicView === 'gallery' && <GalleryPage />}
           </main>
