@@ -354,9 +354,9 @@ export const initialEmailTemplates: EmailTemplate[] = [
 
 export const initialSystemSettings: SystemSettings = {
   companyName: 'DVS PEST CONTROL INFRASTRUCTURE CO',
-  contactEmail: 'info@dvspestcontrol.in',
-  contactPhone: '+91 98390 12345 / +91 94150 67890',
-  address: 'Headquarters: 12/45 Hazratganj Commercial Complex, Lucknow, Uttar Pradesh 226001, India',
+  contactEmail: 'dvsinfrapest@gmail.com',
+  contactPhone: '+91 93304 78897',
+  address: 'Lucknow',
   operatingHours: 'Mon - Sun: 8:00 AM - 9:00 PM (Emergency Dispatch Available across Lucknow & UP)',
   enable2FA: true,
   sessionTimeoutMinutes: 30,

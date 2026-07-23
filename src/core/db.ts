@@ -54,12 +54,9 @@ export const seedFirestoreIfEmpty = async () => {
       settings: collection(db, 'settings')
     };
 
-    // 1. Seed System Settings
-    const settingsSnapshot = await getDocs(query(colRefs.settings, limit(1)));
-    if (settingsSnapshot.empty) {
-      await setFirestoreDocument('settings', 'global', initialSystemSettings);
-      console.log('🌱 Firestore System Settings seeded successfully.');
-    }
+    // 1. Seed/Sync System Settings
+    await setFirestoreDocument('settings', 'global', initialSystemSettings);
+    console.log('🌱 Firestore System Settings synchronized successfully.');
 
     // 2. Seed/Sync Services
     const servicesSnapshot = await getDocs(colRefs.services);
