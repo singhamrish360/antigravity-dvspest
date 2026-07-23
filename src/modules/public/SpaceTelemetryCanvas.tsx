@@ -7,7 +7,10 @@ export const SpaceTelemetryCanvas: React.FC = () => {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const resizeObserver = new ResizeObserver(entries => {
+    const ResizeObserverClass = (window as any).ResizeObserver;
+    if (!ResizeObserverClass) return;
+    
+    const resizeObserver = new ResizeObserverClass((entries: any[]) => {
       for (let entry of entries) {
         setDimensions({
           width: Math.floor(entry.contentRect.width || 400),
