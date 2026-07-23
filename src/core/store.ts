@@ -18,6 +18,7 @@ import {
   updateFirestoreDocument,
   seedFirestoreIfEmpty 
 } from './db';
+import { sendLeadNotificationEmail } from './email';
 
 type Listener = () => void;
 
@@ -119,6 +120,10 @@ class EnterpriseStore {
     
     // Sync to Firestore
     setFirestoreDocument('leads', id, newLead).catch(err => console.error(err));
+    
+    // Dispatch email notification to singhamrish360@gmail.com
+    sendLeadNotificationEmail(newLead).catch(err => console.error('Failed to notify admin via email:', err));
+    
     this.logAudit('LEAD_CREATED', 'Consultation Form', `Created new lead ${id} for ${leadData.customerName}`);
     return newLead;
   }
