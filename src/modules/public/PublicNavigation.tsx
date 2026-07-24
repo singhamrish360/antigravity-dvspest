@@ -114,11 +114,20 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               Our Infrastructure Page
             </button>
             <button 
-              className="btn btn-outline btn-sm" 
-              style={{ borderColor: '#d97706', color: '#d97706', padding: '0.25rem 0.75rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+              className="btn btn-sm animate-pulse" 
+              style={{ 
+                border: '1px solid #d97706', 
+                color: '#fff', 
+                background: 'linear-gradient(135deg, #d97706, #f59e0b)',
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.75rem', 
+                whiteSpace: 'nowrap',
+                fontWeight: 800,
+                boxShadow: '0 0 10px rgba(217, 119, 6, 0.4)'
+              }}
               onClick={() => { setActiveView('under-construction'); setMode('public'); }}
             >
-              Under Construction
+              🏗️ Live Civil Infrastructure
             </button>
           </div>
         </div>
@@ -201,11 +210,17 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
                 Our Infrastructure Page
               </button>
               <button 
-                className="btn btn-outline btn-sm" 
-                style={{ borderColor: '#d97706', color: '#d97706', justifyContent: 'center' }}
+                className="btn btn-sm" 
+                style={{ 
+                  border: '1px solid #d97706', 
+                  color: '#fff', 
+                  background: 'linear-gradient(135deg, #d97706, #f59e0b)',
+                  justifyContent: 'center',
+                  fontWeight: 800
+                }}
                 onClick={() => { setActiveView('under-construction'); setMode('public'); setIsMobileMenuOpen(false); }}
               >
-                Under Construction
+                🏗️ Live Civil Infrastructure
               </button>
             </div>
           </div>
