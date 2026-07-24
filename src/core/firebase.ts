@@ -2,15 +2,16 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, RecaptchaVerifier } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// DVS Pest Infra — Firebase Project: dvspest-infra (Project Number: 373368655490)
+// DVS Pest Infra — Firebase Project: dvspest-infra
+// Config is loaded from environment variables (set in Vercel dashboard)
 const firebaseConfig = {
-  apiKey: "AIzaSyD3bRL8SnJ59Qhf4xFZtYu6nOmUNnGgaBc",
-  authDomain: "dvspest-infra.firebaseapp.com",
-  projectId: "dvspest-infra",
-  storageBucket: "dvspest-infra.firebasestorage.app",
-  messagingSenderId: "373368655490",
-  appId: "1:373368655490:web:52aa3c13e9e1823a7c2e9b",
-  measurementId: "G-G3NK3HVW0W"
+  apiKey: (import.meta as any).env?.VITE_FIREBASE_API_KEY,
+  authDomain: (import.meta as any).env?.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: (import.meta as any).env?.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: (import.meta as any).env?.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: (import.meta as any).env?.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: (import.meta as any).env?.VITE_FIREBASE_APP_ID,
+  measurementId: (import.meta as any).env?.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase App (guard against duplicate initialization)
