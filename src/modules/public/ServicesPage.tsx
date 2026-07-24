@@ -197,6 +197,19 @@ export const ServicesPage: React.FC<Props> = ({ onBookClick }) => {
       </div>
 
       {/* Interactive Pricing Estimator */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .calculator-grid {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+        }
+        @media (max-width: 768px) {
+          .calculator-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+          }
+        }
+      `}} />
+      
       <div className="glass-panel" style={{ padding: '3rem', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', boxShadow: 'var(--shadow-md)' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div className="badge badge-success" style={{ marginBottom: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
@@ -205,7 +218,7 @@ export const ServicesPage: React.FC<Props> = ({ onBookClick }) => {
           <h2 style={{ fontSize: '2rem' }}>Property Scale Cost Calculator</h2>
         </div>
 
-        <div style={{ maxWidth: '700px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
+        <div className="calculator-grid" style={{ maxWidth: '700px', margin: '0 auto', gap: '2rem', alignItems: 'center' }}>
           <div>
             <div className="form-group">
               <label className="form-label">Select Service Offering</label>

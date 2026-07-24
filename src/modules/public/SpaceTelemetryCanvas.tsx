@@ -265,8 +265,13 @@ export const SpaceTelemetryCanvas: React.FC = () => {
 
       // Target Coordinates
       ctx.fillStyle = 'rgba(239, 68, 68, 0.85)';
-      ctx.fillText('🎯 TARGET LOCK: HAZRATGANJ HQ', width - 175, 30);
-      ctx.fillText('📍 COORDS: 26.8467° N | 80.9462° E', width - 175, 45);
+      if (width < 480) {
+        ctx.fillText('🎯 TARGET LOCK: HAZRATGANJ HQ', 25, 80);
+        ctx.fillText('📍 COORDS: 26.8467° N | 80.9462° E', 25, 95);
+      } else {
+        ctx.fillText('🎯 TARGET LOCK: HAZRATGANJ HQ', width - 175, 30);
+        ctx.fillText('📍 COORDS: 26.8467° N | 80.9462° E', width - 175, 45);
+      }
 
       // Scanning Bar Overlay
       scanLineY += 1.5;

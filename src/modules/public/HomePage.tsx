@@ -336,8 +336,20 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
       )}
 
       {/* Hero Section */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .hero-grid {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+        }
+        @media (max-width: 991px) {
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+          }
+        }
+      `}} />
       <section style={{ position: 'relative', padding: '5rem 1.5rem', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', border: '1px solid var(--bg-glass-border)', boxShadow: 'var(--shadow-md)', zIndex: 3 }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center', position: 'relative', zIndex: 3 }}>
+        <div className="hero-grid" style={{ maxWidth: '1280px', margin: '0 auto', gap: '3rem', alignItems: 'center', position: 'relative', zIndex: 3 }}>
           <div>
             <div className="badge badge-warning" style={{ marginBottom: '1.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
               <MapPin size={14} /> Lucknow, UP Headquarters • Enterprise Infrastructure
