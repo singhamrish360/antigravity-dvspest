@@ -83,13 +83,22 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             </button>
           )}
 
-          <button 
-            className="btn btn-outline btn-sm" 
-            style={{ borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)', padding: '0.4rem 0.75rem' }}
-            onClick={() => { setActiveView('infrastructure'); setMode('public'); }}
-          >
-            Our Infrastructure Page
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', alignItems: 'stretch' }}>
+            <button 
+              className="btn btn-outline btn-sm" 
+              style={{ borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)', padding: '0.25rem 0.75rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+              onClick={() => { setActiveView('infrastructure'); setMode('public'); }}
+            >
+              Our Infrastructure Page
+            </button>
+            <button 
+              className="btn btn-outline btn-sm" 
+              style={{ borderColor: '#d97706', color: '#d97706', padding: '0.25rem 0.75rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+              onClick={() => { setActiveView('under-construction'); setMode('public'); }}
+            >
+              Under Construction
+            </button>
+          </div>
         </div>
 
       </div>

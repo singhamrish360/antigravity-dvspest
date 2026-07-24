@@ -1,0 +1,11 @@
+# Robots.txt for DVS Pest Control Infrastructure Co
+# Tells search engines which areas of the site to crawl
+
+User-agent: *
+Allow: /
+
+# Host domain (update if your official domain differs)
+Host: https://dvspestcontrol.com
+
+# Link to sitemap
+Sitemap: https://dvspestcontrol.com/sitemap.xml

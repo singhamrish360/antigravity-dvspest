@@ -343,10 +343,10 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
               <MapPin size={14} /> Lucknow, UP Headquarters • Enterprise Infrastructure
             </div>
             <h1 style={{ fontSize: '3rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-              DVS PEST CONTROL <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>INFRASTRUCTURE CO</span>
+              DVS PEST CONTROL <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>SERVICES IN LUCKNOW</span>
             </h1>
             <p style={{ fontSize: '1.15rem', color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6 }}>
-              Specialized infrastructure pest defense against Cockroaches, Rodents, Mosquitoes, Termites, and Industrial Fumigation across Lucknow and Uttar Pradesh.
+              DVS Pest Control Infrastructure Co provides the best residential and commercial pest control services in Lucknow and Uttar Pradesh. Get professional, eco-friendly cockroach control, termite treatment, rodent exclusion, mosquito control, and warehouse fumigation.
             </p>
             
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -396,9 +396,9 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
       {/* Solutions Matrix */}
       <section style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Our Core Pest Services</h2>
+          <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Our Professional Pest Control Solutions</h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-            Tailored biological defense packages priced transparently in Indian Rupees (₹).
+            Best-in-class pest control treatment packages priced transparently in Indian Rupees (₹) for domestic homes and commercial offices in Lucknow.
           </p>
         </div>
 
@@ -469,6 +469,42 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Lucknow Localities We Serve */}
+      <section style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div className="badge badge-info" style={{ marginBottom: '0.5rem' }}>Our Coverage Area</div>
+          <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Pest Control Service Areas in Lucknow</h2>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
+            DVS provides emergency same-day pest control inspection and treatment services across all major locations and localities in Lucknow.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1.5rem' }}>
+          {[
+            'Gomti Nagar', 'Hazratganj', 'Indira Nagar', 'Alambagh',
+            'Jankipuram', 'Mahanagar', 'Ashiyana', 'Vikas Nagar',
+            'Chowk', 'Charbagh', 'Chinhat', 'Vrindavan Yojna'
+          ].map((loc, idx) => (
+            <div key={idx} className="glass-panel table-row-hover" style={{ 
+              padding: '1.25rem', 
+              textAlign: 'center', 
+              background: '#ffffff', 
+              border: '1px solid var(--bg-glass-border)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              cursor: 'default'
+            }}>
+              <MapPin size={20} style={{ color: 'var(--accent-primary)' }} />
+              <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{loc}</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>2-4 Hr Dispatch</span>
+            </div>
+          ))}
         </div>
       </section>
 
