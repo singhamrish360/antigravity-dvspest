@@ -9,6 +9,7 @@ import { BlogsPage } from './modules/public/BlogsPage';
 import { GalleryPage } from './modules/public/GalleryPage';
 import { InfrastructurePage } from './modules/public/InfrastructurePage';
 import { UnderConstructionPage } from './modules/public/UnderConstructionPage';
+import { VirtualTwinPage } from './modules/public/VirtualTwinPage';
 import { CustomerDirectory } from './modules/crm/CustomerDirectory';
 import { CustomerProfileDetail } from './modules/crm/CustomerProfileDetail';
 import { LeadPipeline } from './modules/crm/LeadPipeline';
@@ -80,6 +81,7 @@ export const App: React.FC = () => {
             {publicView === 'gallery' && <GalleryPage />}
             {publicView === 'infrastructure' && <InfrastructurePage />}
             {publicView === 'under-construction' && <UnderConstructionPage />}
+            {publicView === 'virtual-twin' && <VirtualTwinPage />}
           </main>
           <PublicFooter />
           <AIChatbotWidget />

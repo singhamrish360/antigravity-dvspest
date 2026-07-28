@@ -114,6 +114,22 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               Our Infrastructure Page
             </button>
             <button 
+              className="btn btn-sm" 
+              style={{ 
+                border: '1px solid var(--accent-secondary)', 
+                color: '#fff', 
+                background: 'linear-gradient(135deg, var(--accent-secondary) 0%, #10b981 100%)',
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.75rem', 
+                whiteSpace: 'nowrap',
+                fontWeight: 700,
+                boxShadow: '0 0 10px rgba(5, 150, 105, 0.3)'
+              }}
+              onClick={() => { setActiveView('virtual-twin'); setMode('public'); }}
+            >
+              🧠 Digital Replica Bot
+            </button>
+            <button 
               className="btn btn-sm animate-pulse" 
               style={{ 
                 border: '1px solid #d97706', 
@@ -208,6 +224,19 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
                 onClick={() => { setActiveView('infrastructure'); setMode('public'); setIsMobileMenuOpen(false); }}
               >
                 Our Infrastructure Page
+              </button>
+              <button 
+                className="btn btn-sm" 
+                style={{ 
+                  border: '1px solid var(--accent-secondary)', 
+                  color: '#fff', 
+                  background: 'linear-gradient(135deg, var(--accent-secondary) 0%, #10b981 100%)',
+                  justifyContent: 'center',
+                  fontWeight: 700
+                }}
+                onClick={() => { setActiveView('virtual-twin'); setMode('public'); setIsMobileMenuOpen(false); }}
+              >
+                🧠 Digital Replica Bot
               </button>
               <button 
                 className="btn btn-sm" 
