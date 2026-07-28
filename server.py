@@ -8,10 +8,19 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from datetime import datetime
 
-# ─── Paths ─────────────────────────────────────────────────────────────────────
-VOICE_AI_DIR        = Path(r"c:\Users\ASUS\Desktop\amrish\voice ai")
-KNOWLEDGE_DIR       = VOICE_AI_DIR / "knowledge"
-MEMORY_DIR          = VOICE_AI_DIR / "memory"
+# ─── Paths (cross-platform: works on Render/Linux and Windows) ─────────────────
+SCRIPT_DIR = Path(__file__).parent
+
+# On Windows with the local voice-ai folder, use that. Otherwise use repo-relative folders.
+_WIN_VOICE_AI = Path(r"c:\Users\ASUS\Desktop\amrish\voice ai")
+if _WIN_VOICE_AI.exists():
+    VOICE_AI_DIR  = _WIN_VOICE_AI
+    KNOWLEDGE_DIR = VOICE_AI_DIR / "knowledge"
+    MEMORY_DIR    = VOICE_AI_DIR / "memory"
+else:
+    # Cloud / Linux: use folders next to server.py inside the repo
+    KNOWLEDGE_DIR = SCRIPT_DIR / "knowledge"
+    MEMORY_DIR    = SCRIPT_DIR / "memory"
 CONVERSATIONS_LOG   = MEMORY_DIR / "conversations.jsonl"
 VOICE_ANALYSES_LOG  = MEMORY_DIR / "voice_analyses.jsonl"
 PERSONALITY_PROFILE = MEMORY_DIR / "personality_profile.json"
@@ -645,14 +654,16 @@ class VirtualTwinHandler(BaseHTTPRequestHandler):
 def run(server_class=HTTPServer, handler_class=VirtualTwinHandler, port=8001):
     ensure_dirs()
     stats = get_memory_stats()
-    print("═══════════════════════════════════════════════════════")
-    print(f"  🧠 Virtual Twin API Server → http://localhost:{port}")
-    print(f"  📁 Memory  → {MEMORY_DIR}")
-    print(f"  📁 Knowledge → {KNOWLEDGE_DIR}")
-    print(f"  💬 Conversations logged : {stats['total_conversations']}")
-    print(f"  🎤 Voice analyses stored: {stats['total_voice_analyses']}")
-    print(f"  ✨ Auto-learned facts   : {stats['auto_learned_facts']}")
-    print("═══════════════════════════════════════════════════════")
+    print("=" * 55)
+    print(f"  Virtual Twin API Server -> http://localhost:{port}")
+    print(f"  Memory    -> {MEMORY_DIR}")
+    print(f"  Knowledge -> {KNOWLEDGE_DIR}")
+    print(f"  Conversations logged : {stats['total_conversations']}")
+    print(f"  Voice analyses stored: {stats['total_voice_analyses']}")
+    print(f"  Auto-learned facts   : {stats['auto_learned_facts']}")
+    print("=" * 55)
+    # Render (and most cloud platforms) assign the port via the PORT env var
+    port = int(os.environ.get("PORT", port))
     server_address = ("", port)
     httpd = server_class(server_address, handler_class)
     try:

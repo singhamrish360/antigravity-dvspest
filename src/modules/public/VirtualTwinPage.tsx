@@ -28,7 +28,7 @@ interface MemoryEntry {
   response: string;
 }
 
-const API = 'http://localhost:8001';
+const API = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8001';
 
 export const VirtualTwinPage: React.FC = () => {
   const [isRecording, setIsRecording]       = useState(false);
