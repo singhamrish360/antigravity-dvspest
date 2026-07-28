@@ -29,8 +29,7 @@ interface MemoryEntry {
 }
 
 // Empty string = same domain. Vercel serves /api/* routes automatically.
-// Set VITE_API_URL only if pointing to a separate backend (e.g. local dev).
-const API = (import.meta.env.VITE_API_URL as string) || '';
+const API = '';
 
 export const VirtualTwinPage: React.FC = () => {
   const [isRecording, setIsRecording]       = useState(false);
