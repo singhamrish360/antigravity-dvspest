@@ -4,7 +4,6 @@ import os
 import requests
 
 def query_gemini_multimodal(api_key, audio_b64, mime_type, prompt_text):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     payload = {
         "contents": [{
             "parts": [
@@ -13,16 +12,26 @@ def query_gemini_multimodal(api_key, audio_b64, mime_type, prompt_text):
             ]
         }]
     }
+    
+    # Try 2.0-flash first
+    url_2 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     try:
-        res = requests.post(url, json=payload, timeout=25)
+        res = requests.post(url_2, json=payload, timeout=25)
         if res.status_code == 200:
-            data = res.json()
-            candidates = data.get("candidates", [])
-            if candidates:
-                parts = candidates[0].get("content", {}).get("parts", [])
-                if parts:
-                    return parts[0].get("text", "").strip()
-        return f"Analysis error {res.status_code}"
+            candidates = res.json().get("candidates", [])
+            if candidates and candidates[0].get("content", {}).get("parts", []):
+                return candidates[0]["content"]["parts"][0].get("text", "").strip()
+        elif res.status_code == 429:
+            # Fallback to 1.5-flash if 2.0 is rate-limited
+            url_15 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+            res_15 = requests.post(url_15, json=payload, timeout=25)
+            if res_15.status_code == 200:
+                candidates = res_15.json().get("candidates", [])
+                if candidates and candidates[0].get("content", {}).get("parts", []):
+                    return candidates[0]["content"]["parts"][0].get("text", "").strip()
+            elif res_15.status_code == 429:
+                return "Google Gemini API rate limit exceeded (Error 429). You are speaking or analyzing too fast. Please wait 1 minute and try again."
+        return f"Analysis error: Google API returned status {res.status_code}"
     except Exception as e:
         return f"Network error: {e}"
 

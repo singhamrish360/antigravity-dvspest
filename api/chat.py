@@ -25,26 +25,31 @@ def load_knowledge():
     return "\n\n".join(texts)
 
 def query_gemini(api_key, system_instruction, user_prompt):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     payload = {
         "contents": [{"parts": [{"text": user_prompt}]}],
         "systemInstruction": {"parts": [{"text": system_instruction}]}
     }
+    url_2 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     try:
-        res = requests.post(url, json=payload, timeout=25)
+        res = requests.post(url_2, json=payload, timeout=25)
         if res.status_code == 200:
-            data = res.json()
-            candidates = data.get("candidates", [])
-            if candidates:
-                parts = candidates[0].get("content", {}).get("parts", [])
-                if parts:
-                    return parts[0].get("text", "").strip()
-        return f"Gemini error {res.status_code}"
+            candidates = res.json().get("candidates", [])
+            if candidates and candidates[0].get("content", {}).get("parts", []):
+                return candidates[0]["content"]["parts"][0].get("text", "").strip()
+        elif res.status_code == 429:
+            url_15 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+            res_15 = requests.post(url_15, json=payload, timeout=25)
+            if res_15.status_code == 200:
+                candidates = res_15.json().get("candidates", [])
+                if candidates and candidates[0].get("content", {}).get("parts", []):
+                    return candidates[0]["content"]["parts"][0].get("text", "").strip()
+            elif res_15.status_code == 429:
+                return "I'm overwhelmed with requests right now. Google API Rate limit exceeded (Error 429). Please wait a minute and try again."
+        return f"Gemini API returned status {res.status_code}"
     except Exception as e:
         return f"Network error: {e}"
 
 def transcribe_audio(api_key, audio_b64, mime_type):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     payload = {
         "contents": [{
             "parts": [
@@ -53,15 +58,20 @@ def transcribe_audio(api_key, audio_b64, mime_type):
             ]
         }]
     }
+    url_2 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     try:
-        res = requests.post(url, json=payload, timeout=25)
+        res = requests.post(url_2, json=payload, timeout=25)
         if res.status_code == 200:
-            data = res.json()
-            candidates = data.get("candidates", [])
-            if candidates:
-                parts = candidates[0].get("content", {}).get("parts", [])
-                if parts:
-                    return parts[0].get("text", "").strip()
+            candidates = res.json().get("candidates", [])
+            if candidates and candidates[0].get("content", {}).get("parts", []):
+                return candidates[0]["content"]["parts"][0].get("text", "").strip()
+        elif res.status_code == 429:
+            url_15 = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+            res_15 = requests.post(url_15, json=payload, timeout=25)
+            if res_15.status_code == 200:
+                candidates = res_15.json().get("candidates", [])
+                if candidates and candidates[0].get("content", {}).get("parts", []):
+                    return candidates[0]["content"]["parts"][0].get("text", "").strip()
     except Exception:
         pass
     return ""
