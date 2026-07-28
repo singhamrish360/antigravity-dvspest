@@ -407,26 +407,9 @@ export const VirtualTwinPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Training & Analysis */}
+          {/* Analysis */}
           <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Training & Voice Analysis</h3>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(184,150,105,0.08)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-glass-border)' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, fontSize: '0.9rem' }}>
-                  <Save size={16} /> Train Clone Mode
-                </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-                  Spoken facts saved directly to manual memory.
-                </div>
-              </div>
-              <label style={{ position: 'relative', display: 'inline-block', width: '48px', height: '24px', cursor: 'pointer' }}>
-                <input type="checkbox" checked={isTrainMode} onChange={e => setIsTrainMode(e.target.checked)} style={{ opacity: 0, width: 0, height: 0 }} />
-                <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: isTrainMode ? 'var(--accent-secondary)' : '#cbd5e1', transition: '.4s', borderRadius: '34px' }}>
-                  <span style={{ position: 'absolute', height: '18px', width: '18px', left: isTrainMode ? '26px' : '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%' }} />
-                </span>
-              </label>
-            </div>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Voice Analysis</h3>
 
             <button className="btn btn-outline" style={{ padding: '0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)' }} onClick={analyzeLastVoiceInput} disabled={!lastRecordedBlob || status === 'processing'}>
               <Sparkles size={16} /> Analyze & Save Voice Profile
