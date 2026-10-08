@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, ChevronDown, ArrowRight, Activity, MapPin, Award, Trash2 } from 'lucide-react';
+import { Star, ChevronDown, ArrowRight, Activity, MapPin, Award, Trash2, MessageCircle } from 'lucide-react';
 import { store } from '../../core/store';
 import { SpaceTelemetryCanvas } from './SpaceTelemetryCanvas';
 
 interface Props {
   onBookClick: () => void;
   onServicesClick: () => void;
+  onChatClick?: () => void;
 }
 
 interface PestParticle {
@@ -22,7 +23,7 @@ interface PestParticle {
   splatTime: number; // to fade out splats
 }
 
-export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
+export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChatClick }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [splatCount, setSplatCount] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -365,6 +366,11 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick }) => {
               <button className="btn btn-primary btn-lg" onClick={onBookClick}>
                 Book Inspection <ArrowRight size={20} />
               </button>
+              {onChatClick && (
+                <button className="btn btn-outline btn-lg" onClick={onChatClick}>
+                  <MessageCircle size={20} /> Chat with DVS
+                </button>
+              )}
               <button className="btn btn-secondary btn-lg" onClick={onServicesClick}>
                 Explore Solutions & Rates (₹)
               </button>

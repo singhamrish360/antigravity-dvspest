@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, LayoutDashboard, Bot, LogIn, Menu, X } from 'lucide-react';
+import { Shield, LayoutDashboard, Bot, LogIn, Menu, X, MessageCircle } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
 import { security } from '../../core/security';
 
@@ -87,6 +87,21 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               {item.label}
             </button>
           ))}
+          <button
+            onClick={() => setActiveView('virtual-twin')}
+            className="btn btn-sm"
+            style={{
+              background: activeView === 'virtual-twin' ? 'var(--accent-primary)' : '#fffbeb',
+              color: activeView === 'virtual-twin' ? '#fff' : 'var(--accent-primary)',
+              border: '1px solid var(--accent-primary)',
+              borderRadius: 'var(--radius-full)',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <MessageCircle size={15} /> Chat with DVS
+          </button>
         </nav>
 
         {/* Action Controls (Desktop) */}
@@ -127,7 +142,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               }}
               onClick={() => { setActiveView('virtual-twin'); setMode('public'); }}
             >
-              🧠 Digital Replica Bot
+              💬 Chat with DVS
             </button>
             <button 
               className="btn btn-sm animate-pulse" 
@@ -200,6 +215,13 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
                   {item.label}
                 </button>
               ))}
+              <button
+                className="btn btn-primary"
+                style={{ justifyContent: 'center', fontWeight: 700 }}
+                onClick={() => { setActiveView('virtual-twin'); setIsMobileMenuOpen(false); }}
+              >
+                <MessageCircle size={16} /> Chat with DVS
+              </button>
             </div>
 
             {/* Actions Stack */}
@@ -236,7 +258,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
                 }}
                 onClick={() => { setActiveView('virtual-twin'); setMode('public'); setIsMobileMenuOpen(false); }}
               >
-                🧠 Digital Replica Bot
+                💬 Chat with DVS
               </button>
               <button 
                 className="btn btn-sm" 

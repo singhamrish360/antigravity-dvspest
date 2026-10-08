@@ -1,8 +1,12 @@
 import React from 'react';
-import { Shield, Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, CheckCircle2, MessageCircle } from 'lucide-react';
 import { store } from '../../core/store';
 
-export const PublicFooter: React.FC = () => {
+interface Props {
+  onChatClick?: () => void;
+}
+
+export const PublicFooter: React.FC<Props> = ({ onChatClick }) => {
   const settings = store.getSettings();
 
   return (
@@ -43,6 +47,16 @@ export const PublicFooter: React.FC = () => {
               <Mail size={18} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
               <span>{settings.contactEmail}</span>
             </li>
+            {onChatClick && (
+              <li>
+                <button
+                  onClick={onChatClick}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.9rem' }}
+                >
+                  <MessageCircle size={18} style={{ flexShrink: 0 }} /> Chat with DVS
+                </button>
+              </li>
+            )}
           </ul>
         </div>
 
