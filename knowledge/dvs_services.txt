@@ -1,0 +1,49 @@
+# DVS Pest Control Infrastructure Co - Customer Assistant Knowledge Base
+# Source: facts already published on the website (src/core/mockData.ts, HomePage.tsx, ServicesPage.tsx).
+# Lines starting with '#' are ignored by the API loader. Do not add facts that are not on the website.
+
+== COMPANY ==
+- Business name: DVS PEST CONTROL INFRASTRUCTURE CO (DVS Pest Control), headquartered in Lucknow, Uttar Pradesh, India.
+- Website: pestcontrolinfra.co.in
+- Phone / WhatsApp: +91 93304 78897 (WhatsApp link: https://wa.me/919330478897)
+- Email: dvsinfrapest@gmail.com
+- Operating hours: Mon - Sun, 8:00 AM - 9:00 PM. Emergency dispatch available across Lucknow and UP.
+- DVS serves residential homes, commercial offices/shops, and industrial warehouses in Lucknow and Uttar Pradesh.
+- The website states 12,000+ properties treated.
+- All prices are in Indian Rupees (₹). Final price is confirmed after inspection based on property size and infestation level.
+
+== CORE SERVICES (starting rates) ==
+- Advanced Cockroaches Control - starting ₹1,499, about 60 minutes. Odorless herbal gel plus targeted micro-encapsulated spray for German and American cockroaches. Features: odorless and eco-friendly herbal gel; child, pet and kitchen-surface safe; drain and cabinet crevice injection; 90-day satisfaction guarantee.
+- Smart Rodents Control & Exclusion (rats/mice) - starting ₹1,999, about 90 minutes. Tamper-proof bait stations, acoustic sensors and structural entry sealing. Features: heavy-duty wire mesh entry-point sealing; lockable bio-secure bait stations; sanitization and odor neutralization; zero-poison humane capture options.
+- Anti-Mosquitoes Fogging & Larvicide - starting ₹1,299, about 45 minutes. Cold thermal fogging plus anti-larval treatment in drains and standing water to protect against Dengue and Malaria. Features: outdoor thermal fogging; drain and water tank anti-larval granules; rapid knockdown; ideal for lawns, gardens and complexes.
+- Subterranean Termites Control Shield - starting ₹6,500, about 4 hours (240 minutes). Drill-Fill-Seal chemical barrier along walls and foundations. Features: thermal imaging moisture detection sweep; Drill-Fill-Seal foundation barrier; unconditional 5-year written warranty; free annual inspection checks.
+- Industrial & Grain Storage Fumigation - starting ₹8,500, about 5 hours (300 minutes). Phosphine / Methyl Bromide gas fumigation for warehouses, food processing units, grains and shipping containers. Features: FSSAI and Plant Quarantine clearance certificates; gas concentration monitoring and degassing; full commodity pest elimination. Industrial fumigation needs a site survey by the DVS team.
+
+== BHK APARTMENT RATE CARD, LUCKNOW (₹ for 1 BHK / 2 BHK / 3 BHK / 4 BHK / 5 BHK) ==
+- General Pest Control: ₹899 / ₹1,300 / ₹1,600 / ₹1,800 / ₹2,100
+- Cockroach Control: ₹999 / ₹1,199 / ₹1,499 / ₹1,799 / ₹1,999
+- Ant Control: ₹949 / ₹1,299 / ₹1,549 / ₹1,899 / ₹2,099
+- Termite Control: ₹3,249 / ₹5,500 / ₹6,500 / ₹7,500 / ₹8,500
+- Mosquito Control: ₹999 / ₹1,899 / ₹2,600 / ₹3,000 / ₹3,300
+- Bed Bug Control: ₹1,399 / ₹2,599 / ₹3,399 / ₹3,999 / ₹4,499
+- Lizard Control: ₹900 / ₹1,500 / ₹1,800 / ₹2,100 / ₹2,500
+- Bees Control: ₹1,299 / ₹1,549 / ₹1,799 / ₹2,049 / ₹2,399
+- Bird Netting Services: ₹1,300 / ₹2,400 / ₹3,500 / ₹4,400 / ₹5,300
+- For larger commercial/industrial properties the website estimator scales the starting rate by square feet (starting rate x sq.ft / 1500); exact quote after inspection.
+
+== SERVICE AREAS IN LUCKNOW (2-4 hour dispatch) ==
+- Gomti Nagar, Hazratganj, Indira Nagar, Alambagh, Jankipuram, Mahanagar, Ashiyana, Vikas Nagar, Chowk, Charbagh, Chinhat, Vrindavan Yojna.
+- Technician arrival is typically within 2 to 4 hours across these localities and surrounding UP zones. Same-day inspection is available.
+
+== FAQ ==
+- How fast can DVS respond in Lucknow? The Lucknow dispatch hub aims for on-site technician arrival within 2 to 4 hours across Hazratganj, Gomti Nagar, Alambagh, Indira Nagar and surrounding zones.
+- Is the herbal cockroach gel odorless and safe for kitchens? Yes. The herbal gel is odorless, non-toxic, eco-friendly and safe for children, pets and commercial food preparation areas.
+- What does the 5-year termite warranty include? The Drill-Fill-Seal subterranean termite treatment comes with an unconditional 5-year written warranty certificate, including annual complimentary thermal moisture scans.
+- What fumigation does DVS offer? Phosphine gas fumigation for food processing units, grain stores and commercial warehouses in Lucknow and UP, with FSSAI and Plant Quarantine compliance certification.
+
+== BOOKING GUIDANCE (for the assistant) ==
+- Always offer to book a free inspection / service visit.
+- To book, collect: 1) name, 2) mobile number, 3) locality in Lucknow, 4) pest problem, 5) property type and size (e.g. 2 BHK flat, shop, office, warehouse). Ask for missing details one or two at a time.
+- After collecting details, say the DVS team will call to confirm the visit time. Never say a booking is confirmed.
+- If the customer prefers, they can call or WhatsApp +91 93304 78897, email dvsinfrapest@gmail.com, or use the "Book Inspection" form on the website.
+- Complex industrial / warehouse / container fumigation and large commercial jobs are handled by a human expert: share the phone/WhatsApp and offer a site survey.

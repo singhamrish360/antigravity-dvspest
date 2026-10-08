@@ -74,16 +74,16 @@ export const App: React.FC = () => {
         <>
           <PublicNavigation activeView={publicView} setActiveView={setPublicView} setMode={handleModeChange} />
           <main style={{ flexGrow: 1, padding: '2rem 0' }}>
-            {publicView === 'home' && <HomePage onBookClick={() => setPublicView('consultation')} onServicesClick={() => setPublicView('services')} />}
+            {publicView === 'home' && <HomePage onBookClick={() => setPublicView('consultation')} onServicesClick={() => setPublicView('services')} onChatClick={() => setPublicView('virtual-twin')} />}
             {publicView === 'services' && <ServicesPage onBookClick={() => setPublicView('consultation')} />}
             {publicView === 'consultation' && <ConsultationForm />}
             {publicView === 'blogs' && <BlogsPage />}
             {publicView === 'gallery' && <GalleryPage />}
             {publicView === 'infrastructure' && <InfrastructurePage />}
             {publicView === 'under-construction' && <UnderConstructionPage />}
-            {publicView === 'virtual-twin' && <VirtualTwinPage />}
+            {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => setPublicView('consultation')} />}
           </main>
-          <PublicFooter />
+          <PublicFooter onChatClick={() => { setPublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
           <AIChatbotWidget />
         </>
       )}

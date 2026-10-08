@@ -8,6 +8,12 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from datetime import datetime
 
+# Shared DVS / twin prompt builder (same logic as the Vercel function in api/chat.py)
+from api.chat import (
+    build_system_instruction, build_contents, dvs_fallback_text, is_error_text, VALID_MODES,
+    load_knowledge as load_repo_knowledge,  # always the repo's knowledge/ folder (has dvs_services.txt)
+)
+
 # ─── Paths (cross-platform: works on Render/Linux and Windows) ─────────────────
 SCRIPT_DIR = Path(__file__).parent
 
@@ -19,12 +25,17 @@ if _WIN_VOICE_AI.exists():
     MEMORY_DIR    = VOICE_AI_DIR / "memory"
 else:
     # Cloud / Linux: use folders next to server.py inside the repo
+    VOICE_AI_DIR  = SCRIPT_DIR  # needed by load_keys() for the optional .env lookup
     KNOWLEDGE_DIR = SCRIPT_DIR / "knowledge"
     MEMORY_DIR    = SCRIPT_DIR / "memory"
 CONVERSATIONS_LOG   = MEMORY_DIR / "conversations.jsonl"
 VOICE_ANALYSES_LOG  = MEMORY_DIR / "voice_analyses.jsonl"
 PERSONALITY_PROFILE = MEMORY_DIR / "personality_profile.json"
 AUTO_LEARNED_FILE   = KNOWLEDGE_DIR / "auto_learned.txt"
+
+# Gemini models (configurable; gemini-2.0-flash was shut down by Google on 2026-06-01)
+GEMINI_MODEL          = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
+GEMINI_FALLBACK_MODEL = os.environ.get("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash-lite")
 
 # ─── Setup ─────────────────────────────────────────────────────────────────────
 def ensure_dirs():
@@ -257,18 +268,21 @@ def rebuild_personality_profile(api_key):
         print(f"[PROFILE ERROR] {e}")
 
 # ─── Gemini API ────────────────────────────────────────────────────────────────
-def query_gemini(api_key, system_instruction, user_prompt):
+def query_gemini(api_key, system_instruction, user_prompt, contents=None):
     url = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"gemini-2.0-flash:generateContent?key={api_key}"
+        f"{GEMINI_MODEL}:generateContent?key={api_key}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {
-        "contents": [{"parts": [{"text": user_prompt}]}],
+        "contents": contents or [{"parts": [{"text": user_prompt}]}],
         "systemInstruction": {"parts": [{"text": system_instruction}]}
     }
     try:
         res = requests.post(url, headers=headers, json=payload, timeout=30)
+        if res.status_code in (429, 404):
+            # Rate limited / model unavailable: retry once on the fallback model
+            res = requests.post(url.replace(GEMINI_MODEL, GEMINI_FALLBACK_MODEL, 1), headers=headers, json=payload, timeout=30)
         if res.status_code == 200:
             data       = res.json()
             candidates = data.get("candidates", [])
@@ -325,7 +339,7 @@ def generate_voice_fish(api_key, voice_id, text, output_path):
 def transcribe_audio(api_key, audio_b64, mime_type="audio/webm"):
     url     = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"gemini-2.0-flash:generateContent?key={api_key}"
+        f"{GEMINI_MODEL}:generateContent?key={api_key}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -357,7 +371,7 @@ def transcribe_audio(api_key, audio_b64, mime_type="audio/webm"):
 def analyze_voice(api_key, audio_b64, mime_type="audio/webm"):
     url     = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"gemini-2.0-flash:generateContent?key={api_key}"
+        f"{GEMINI_MODEL}:generateContent?key={api_key}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -507,6 +521,12 @@ class VirtualTwinHandler(BaseHTTPRequestHandler):
             text_query = req_data.get("text", "")
             train_mode = req_data.get("train", False)
             mime_type  = req_data.get("mimeType", "audio/webm")
+            mode       = str(req_data.get("mode") or "dvs").strip().lower()
+            if mode not in VALID_MODES:
+                mode = "dvs"
+            history    = req_data.get("history") if isinstance(req_data.get("history"), list) else []
+            if mode != "twin":
+                train_mode = False  # training only applies to the twin persona
 
             # Transcribe audio if provided
             if audio_b64:
@@ -529,7 +549,28 @@ class VirtualTwinHandler(BaseHTTPRequestHandler):
                 self.send_json({"query": text_query, "text": res_text, "trained": True})
                 return
 
-            # Normal chat: load knowledge + recent memory context
+            # DVS customer assistant mode: knowledge only, no twin memory/logging
+            if mode == "dvs":
+                response_text = query_gemini(
+                    gemini_key,
+                    build_system_instruction("dvs", load_repo_knowledge()),
+                    text_query,
+                    contents=build_contents(history, text_query)
+                )
+                fallback_used = is_error_text(response_text) or response_text.startswith(("Gemini API Error", "Network connection error", "No response text"))
+                if fallback_used:
+                    response_text = dvs_fallback_text()
+                self.send_json({
+                    "query":        text_query,
+                    "text":         response_text,
+                    "audio":        "",
+                    "auto_learned": False,
+                    "mode":         mode,
+                    "fallback":     fallback_used
+                })
+                return
+
+            # Normal chat (twin mode): load knowledge + recent memory context
             print("Loading knowledge and recent memory...")
             knowledge     = load_knowledge()
             recent_memory = load_recent_memory(n=5)
@@ -624,7 +665,8 @@ class VirtualTwinHandler(BaseHTTPRequestHandler):
                 "query":        text_query,
                 "text":         response_text,
                 "audio":        audio_response_b64,
-                "auto_learned": auto_learned   # tells frontend if new traits were extracted
+                "auto_learned": auto_learned,  # tells frontend if new traits were extracted
+                "mode":         mode
             })
 
         # ── /api/analyze-voice ────────────────────────────────────────────────
