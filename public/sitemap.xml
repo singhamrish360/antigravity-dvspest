@@ -1,163 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://pestcontrolinfra.co.in/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pestcontrolinfra.co.in/drawings" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://pestcontrolinfra.co.in/drawings/ghar-ka-naksha" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pestcontrolinfra.co.in/drawings" />
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/20x30-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/20x40-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/20x50-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/25x40-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/25x50-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/30x40-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/30x50-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/30x60-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/40x60-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/50x80-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/1000-sq-ft-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/1200-sq-ft-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/1500-sq-ft-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/2000-sq-ft-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-lucknow</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-kanpur</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-varanasi</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-prayagraj</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-gorakhpur</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-ayodhya</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-bareilly</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-agra</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-noida</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-patna</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/house-map-design-delhi</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/east-facing-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/north-facing-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/west-facing-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/south-facing-house-plan</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pestcontrolinfra.co.in/drawings/ghar-ka-naksha</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pestcontrolinfra.co.in/drawings" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://pestcontrolinfra.co.in/drawings/ghar-ka-naksha" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pestcontrolinfra.co.in/drawings" />
   </url>
 </urlset>
