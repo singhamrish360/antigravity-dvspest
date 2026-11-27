@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Calculator, Check, Clock, FileText, MessageCircle, Phone, PencilRuler, RefreshCw, Send, Box } from 'lucide-react';
+import { Calculator, Check, Clock, FileText, MessageCircle, Phone, PencilRuler, RefreshCw, Send, Box, X } from 'lucide-react';
 
 const PHONE_DISPLAY = '+91 93304 78897';
 const WA_BASE = 'https://wa.me/919330478897';
@@ -19,8 +19,34 @@ const whatsappLink = (sqFt?: number) => {
   return `${WA_BASE}?text=${encodeURIComponent(text)}`;
 };
 
+
+const SAMPLE_WORK = [
+  {
+    src: '/drawings/sample-3d-front-elevation.webp',
+    title: '3D front elevation',
+    alt: '3D front elevation of a residence, prepared as a sample of DVS drawing work',
+    featured: true,
+  },
+  {
+    src: '/drawings/sample-ground-floor-plan.webp',
+    title: 'Ground floor plan',
+    alt: 'Ground floor plan from a sample AutoCAD house drawing set',
+  },
+  {
+    src: '/drawings/sample-front-elevation.webp',
+    title: 'Front elevation',
+    alt: 'Front elevation drawing from a sample AutoCAD house drawing set',
+  },
+  {
+    src: '/drawings/sample-section.webp',
+    title: 'Section',
+    alt: 'Building section from a sample AutoCAD house drawing set',
+  },
+] as const;
+
 export const DrawingsPage: React.FC = () => {
   const [sqFtInput, setSqFtInput] = useState(String(EXAMPLE_SQFT));
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const parsedSqFt = useMemo(() => {
     const n = Number(sqFtInput.replace(/,/g, ''));
     return Number.isFinite(n) && n > 0 ? n : 0;
@@ -31,6 +57,20 @@ export const DrawingsPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightboxIndex(null);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [lightboxIndex]);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -140,12 +180,67 @@ export const DrawingsPage: React.FC = () => {
           gap: 2rem;
           align-items: center;
         }
+        .drawings-gallery-feature {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1.25rem;
+        }
+        .drawings-gallery-sheets {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.25rem;
+        }
+        .drawings-gallery-item {
+          background: #ffffff;
+          cursor: pointer;
+          padding: 0;
+          overflow: hidden;
+          text-align: left;
+          width: 100%;
+          font: inherit;
+          color: inherit;
+          appearance: none;
+          border: 1px solid var(--bg-glass-border);
+        }
+        .drawings-gallery-item img {
+          display: block;
+          width: 100%;
+          height: auto;
+          background: #ffffff;
+        }
+        .drawings-gallery-item figcaption,
+        .drawings-gallery-item .caption {
+          padding: 0.85rem 1rem 1rem;
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+        .drawings-lightbox {
+          position: fixed;
+          inset: 0;
+          background: rgba(28, 22, 16, 0.84);
+          z-index: 80;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.5rem;
+        }
+        .drawings-lightbox img {
+          max-width: min(1100px, 100%);
+          max-height: calc(100vh - 7rem);
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          background: #ffffff;
+          border-radius: 12px;
+          box-shadow: var(--shadow-lg);
+        }
         @media (max-width: 768px) {
           .drawings-pricing-grid,
           .drawings-calc-grid {
             grid-template-columns: 1fr;
           }
-          .drawings-steps-grid {
+          .drawings-steps-grid,
+          .drawings-gallery-sheets {
             grid-template-columns: 1fr;
           }
         }
@@ -245,6 +340,80 @@ export const DrawingsPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Sample work */}
+      <div>
+        <h2 style={{ fontSize: '1.75rem', marginBottom: '0.75rem', textAlign: 'center' }}>Sample work</h2>
+        <p style={{ color: 'var(--text-secondary)', textAlign: 'center', maxWidth: '700px', margin: '0 auto 2rem', lineHeight: 1.6 }}>
+          A completed house drawing set: a 3D front elevation, ground floor plan, front elevation and section. Tap any image to enlarge it.
+        </p>
+        <div className="drawings-gallery-feature">
+          <button
+            type="button"
+            className="glass-card drawings-gallery-item"
+            onClick={() => setLightboxIndex(0)}
+            style={{ maxWidth: '420px' }}
+            aria-label="View 3D front elevation larger"
+          >
+            <img src={SAMPLE_WORK[0].src} alt={SAMPLE_WORK[0].alt} />
+            <div className="caption">{SAMPLE_WORK[0].title}</div>
+          </button>
+        </div>
+        <div className="drawings-gallery-sheets">
+          {SAMPLE_WORK.slice(1).map((item, index) => (
+            <button
+              type="button"
+              key={item.src}
+              className="glass-card drawings-gallery-item"
+              onClick={() => setLightboxIndex(index + 1)}
+              aria-label={`View ${item.title} larger`}
+            >
+              <img src={item.src} alt={item.alt} />
+              <div className="caption">{item.title}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {lightboxIndex !== null && (
+        <div
+          className="drawings-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={SAMPLE_WORK[lightboxIndex].title}
+          onClick={() => setLightboxIndex(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxIndex(null)}
+            aria-label="Close image"
+            style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              width: '44px',
+              height: '44px',
+              borderRadius: '999px',
+              border: 'none',
+              background: '#ffffff',
+              color: 'var(--text-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: 'var(--shadow-md)',
+            }}
+          >
+            <X size={20} />
+          </button>
+          <div onClick={(event) => event.stopPropagation()} style={{ textAlign: 'center' }}>
+            <img src={SAMPLE_WORK[lightboxIndex].src} alt={SAMPLE_WORK[lightboxIndex].alt} />
+            <p style={{ color: '#faf8f5', marginTop: '0.85rem', fontWeight: 600 }}>
+              {SAMPLE_WORK[lightboxIndex].title}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* How it works */}
       <div>
