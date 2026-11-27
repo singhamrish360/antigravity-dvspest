@@ -8,6 +8,7 @@ import {
   SITE_NAME,
   SITE_URL,
 } from './constants';
+import { lucknowLocalitiesServed } from './pest-routes';
 
 export const pestControlJsonLd = () => ({
   '@context': 'https://schema.org',
@@ -104,3 +105,94 @@ export const draftingJsonLd = (pageUrl: string, faqs: FaqItem[]) => ({
     },
   ],
 });
+
+export const faqJsonLd = (pageUrl: string, faqs: FaqItem[]) => ({
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a,
+    },
+  })),
+});
+
+export const pestPageJsonLd = (opts: {
+  pageUrl: string;
+  serviceName: string;
+  serviceType: string;
+  description: string;
+  faqs: FaqItem[];
+  areaName?: string;
+}) => {
+  const areaServed = opts.areaName
+    ? { '@type': 'Place', name: `${opts.areaName}, Lucknow` }
+    : [
+        { '@type': 'AdministrativeArea', name: CITY_BASE },
+        { '@type': 'AdministrativeArea', name: 'Uttar Pradesh' },
+      ];
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': ['LocalBusiness', 'PestControlService'],
+        '@id': `${SITE_URL}/#pestcontrol`,
+        name: SITE_NAME,
+        image: `${SITE_URL}/services-grid.jpg`,
+        url: SITE_URL,
+        telephone: PHONE_E164,
+        priceRange: '₹899 - ₹8500',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: CITY_BASE,
+          addressRegion: 'Uttar Pradesh',
+          addressCountry: 'IN',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 26.8467,
+          longitude: 80.9462,
+        },
+        openingHoursSpecification: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          opens: '08:00',
+          closes: '21:00',
+        },
+        areaServed: [
+          { '@type': 'AdministrativeArea', name: CITY_BASE },
+          { '@type': 'AdministrativeArea', name: 'Uttar Pradesh' },
+          ...lucknowLocalitiesServed().map((name) => ({
+            '@type': 'Place',
+            name: `${name}, Lucknow`,
+          })),
+        ],
+      },
+      {
+        '@type': 'Service',
+        '@id': `${opts.pageUrl}#service`,
+        name: opts.serviceName,
+        serviceType: opts.serviceType,
+        description: opts.description,
+        url: opts.pageUrl,
+        provider: { '@id': `${SITE_URL}/#pestcontrol` },
+        areaServed,
+      },
+      faqJsonLd(opts.pageUrl, opts.faqs),
+    ],
+  };
+};
+
+export const pestHomeJsonLd = (faqs: FaqItem[]) =>
+  pestPageJsonLd({
+    pageUrl: `${SITE_URL}/`,
+    serviceName: 'Pest control in Lucknow',
+    serviceType: 'Pest control',
+    description:
+      'DVS Pest Control treats cockroaches, termites, rodents and mosquitoes, and does warehouse fumigation, for homes and businesses in Lucknow and Uttar Pradesh.',
+    faqs,
+  });
+

@@ -34,3 +34,8 @@ export const defaultWhatsappMessage = (sqFt?: number) => {
     : ' My plot size is ___ sq ft.';
   return `Hi DVS, I would like a quote for house drawings.${sizeNote}`;
 };
+
+export const defaultPestWhatsappMessage = (topic?: string) => {
+  const extra = topic && topic.trim() ? ` ${topic.trim()}` : '';
+  return `Hi DVS, I would like to book a pest control inspection in Lucknow.${extra}`;
+};

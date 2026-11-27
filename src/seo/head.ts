@@ -19,6 +19,21 @@ export const homeHead = (jsonLd: unknown): HeadTags => ({
   lang: 'en',
 });
 
+export const pestHead = (
+  title: string,
+  description: string,
+  canonicalPath: string,
+  jsonLd: unknown,
+  lang = 'en',
+): HeadTags => ({
+  title,
+  description,
+  canonical: `${SITE_URL}${canonicalPath}`,
+  ogImage: OG_IMAGE_HOME,
+  jsonLd,
+  lang,
+});
+
 export const drawingsHead = (
   title: string,
   description: string,
