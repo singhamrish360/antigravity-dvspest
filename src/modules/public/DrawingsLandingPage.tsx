@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import { BlueprintBackgroundGame } from './BlueprintBackgroundGame';
+import { ConstructionCrewBackground } from './ConstructionCrewBackground';
 import { DrawingsBrowseLinks } from './DrawingsBrowseLinks';
 import { DrawingsCalculator } from './DrawingsCalculator';
 import { DrawingsCredentials } from './DrawingsCredentials';
@@ -21,7 +22,8 @@ export const DrawingsLandingPage: React.FC<{ route: SeoRoute }> = ({ route }) =>
   return (
     <>
       <BlueprintBackgroundGame />
-      <div className="page-content-over-game" style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '3.5rem' }} lang={route.lang}>
+      <ConstructionCrewBackground />
+      <div className="page-content-over-game drawings-content" style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '3.5rem' }} lang={route.lang}>
         <style dangerouslySetInnerHTML={{ __html: DRAWINGS_PAGE_CSS }} />
 
         <div style={{ textAlign: 'center', maxWidth: '860px', margin: '0 auto' }}>
