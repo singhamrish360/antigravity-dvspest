@@ -350,7 +350,7 @@ a:hover {
   opacity: 0.48;
 }
 .bg-game-canvas-drawings {
-  opacity: 0.42;
+  opacity: 0.2;
   cursor: cell;
 }
 .bg-game-score {
@@ -394,5 +394,138 @@ a:hover {
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.78rem;
+  }
+}
+
+/* Drawings pages: keep blueprint lines and crew behind a readable content column */
+.drawings-content {
+  position: relative;
+  z-index: 3;
+}
+.drawings-content::before {
+  content: '';
+  position: absolute;
+  inset: 0.25rem 0.15rem;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 248, 245, 0.9) 0%,
+    rgba(250, 248, 245, 0.84) 18%,
+    rgba(250, 248, 245, 0.84) 82%,
+    rgba(250, 248, 245, 0.9) 100%
+  );
+  border-radius: 24px;
+  z-index: -1;
+  pointer-events: none;
+}
+.construction-crew {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.construction-crew svg {
+  overflow: visible;
+  display: block;
+}
+.crew-scene {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  opacity: 0.55;
+  will-change: transform;
+}
+.crew-scene-wide { width: 140px; height: 110px; }
+.crew-scene-tall { width: 90px; height: 150px; }
+.crew-scene-crane { width: 130px; height: 170px; }
+
+.crew-walk-bricks { left: 2%; bottom: 7%; animation: crew-amble 28s ease-in-out infinite alternate; }
+.crew-wheelbarrow { left: 18%; bottom: 4%; animation: crew-amble 34s ease-in-out infinite alternate-reverse; }
+.crew-hammer { right: 4%; bottom: 8%; animation: crew-idle 5s ease-in-out infinite; }
+.crew-measure { right: 16%; bottom: 5%; animation: crew-idle 7s ease-in-out infinite 0.6s; }
+.crew-beam-pair { left: 3%; top: 42%; animation: crew-amble 40s ease-in-out infinite alternate; }
+.crew-engineer { right: 3%; top: 38%; animation: crew-idle 6s ease-in-out infinite; }
+.crew-scaffold { right: 7%; top: 12%; animation: crew-idle 8s ease-in-out infinite; }
+.crew-crane { left: 5%; top: 11%; animation: crew-idle 9s ease-in-out infinite; }
+.crew-shovel { left: 28%; bottom: 3%; animation: crew-amble 36s ease-in-out infinite alternate; }
+.crew-direct { right: 28%; bottom: 3%; animation: crew-idle 6.5s ease-in-out infinite 0.4s; }
+
+.crew-arm-hammer,
+.crew-wheel,
+.crew-climber,
+.crew-hook,
+.crew-tape,
+.crew-flag {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.crew-arm-hammer { animation: crew-hammer 0.7s ease-in-out infinite; }
+.crew-wheel { animation: crew-spin 1.4s linear infinite; }
+.crew-climber { animation: crew-climb 7s ease-in-out infinite; }
+.crew-hook { animation: crew-lift 6s ease-in-out infinite; }
+.crew-tape { transform-origin: left center; animation: crew-tape 5s ease-in-out infinite; }
+.crew-flag { transform-origin: left bottom; animation: crew-wave 1.8s ease-in-out infinite; }
+
+@keyframes crew-amble {
+  from { transform: translateX(0); }
+  to { transform: translateX(36px); }
+}
+@keyframes crew-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes crew-hammer {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(42deg); }
+}
+@keyframes crew-spin { to { transform: rotate(360deg); } }
+@keyframes crew-climb {
+  0%, 100% { transform: translateY(18px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes crew-lift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(18px); }
+}
+@keyframes crew-tape {
+  0%, 100% { transform: scaleX(0.45); }
+  50% { transform: scaleX(1); }
+}
+@keyframes crew-wave {
+  0%, 100% { transform: rotate(-12deg); }
+  50% { transform: rotate(18deg); }
+}
+
+@media (max-width: 768px) {
+  .bg-game-canvas-drawings { opacity: 0.12; }
+  .drawings-content::before {
+    inset: 0;
+    border-radius: 0;
+    background: rgba(250, 248, 245, 0.92);
+  }
+  .construction-crew { opacity: 0.7; }
+  .crew-scene { opacity: 0.42; }
+  .crew-scaffold,
+  .crew-crane,
+  .crew-beam-pair,
+  .crew-shovel,
+  .crew-direct { display: none; }
+  .crew-walk-bricks { left: 2%; bottom: 11%; }
+  .crew-wheelbarrow { left: auto; right: 2%; bottom: 11%; }
+  .crew-hammer { right: 3%; bottom: 22%; }
+  .crew-measure { display: none; }
+  .crew-engineer { right: 2%; top: auto; bottom: 32%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .construction-crew *,
+  .crew-scene,
+  .crew-arm-hammer,
+  .crew-wheel,
+  .crew-climber,
+  .crew-hook,
+  .crew-tape,
+  .crew-flag {
+    animation: none !important;
   }
 }
