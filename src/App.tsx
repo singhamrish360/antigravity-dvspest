@@ -10,6 +10,7 @@ import { GalleryPage } from './modules/public/GalleryPage';
 import { InfrastructurePage } from './modules/public/InfrastructurePage';
 import { UnderConstructionPage } from './modules/public/UnderConstructionPage';
 import { VirtualTwinPage } from './modules/public/VirtualTwinPage';
+import { DrawingsPage } from './modules/public/DrawingsPage';
 import { CustomerDirectory } from './modules/crm/CustomerDirectory';
 import { CustomerProfileDetail } from './modules/crm/CustomerProfileDetail';
 import { LeadPipeline } from './modules/crm/LeadPipeline';
@@ -22,7 +23,18 @@ import { security } from './core/security';
 
 export const App: React.FC = () => {
   const [mode, setMode] = useState<NavigationMode>('public');
-  const [publicView, setPublicView] = useState('home');
+  const initialPublicView = typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '') === '/drawings'
+    ? 'drawings'
+    : 'home';
+  const [publicView, setPublicView] = useState(initialPublicView);
+
+  const handlePublicView = (view: string) => {
+    setPublicView(view);
+    const path = view === 'drawings' ? '/drawings' : '/';
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
+  };
   
   // Security session monitoring
   const [session, setSession] = useState(security.getSession());
@@ -35,6 +47,15 @@ export const App: React.FC = () => {
       setSession(security.getSession());
     });
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const path = window.location.pathname.replace(/\/+$/, '') || '/';
+      setPublicView(path === '/drawings' ? 'drawings' : 'home');
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   // Intercept mode switching to gate Admin panels with Firebase Auth
@@ -72,18 +93,19 @@ export const App: React.FC = () => {
       {/* Mode 1: Public Website Portal */}
       {mode === 'public' && (
         <>
-          <PublicNavigation activeView={publicView} setActiveView={setPublicView} setMode={handleModeChange} />
+          <PublicNavigation activeView={publicView} setActiveView={handlePublicView} setMode={handleModeChange} />
           <main style={{ flexGrow: 1, padding: '2rem 0' }}>
-            {publicView === 'home' && <HomePage onBookClick={() => setPublicView('consultation')} onServicesClick={() => setPublicView('services')} onChatClick={() => setPublicView('virtual-twin')} />}
-            {publicView === 'services' && <ServicesPage onBookClick={() => setPublicView('consultation')} />}
+            {publicView === 'home' && <HomePage onBookClick={() => handlePublicView('consultation')} onServicesClick={() => handlePublicView('services')} onChatClick={() => handlePublicView('virtual-twin')} />}
+            {publicView === 'services' && <ServicesPage onBookClick={() => handlePublicView('consultation')} />}
             {publicView === 'consultation' && <ConsultationForm />}
             {publicView === 'blogs' && <BlogsPage />}
             {publicView === 'gallery' && <GalleryPage />}
             {publicView === 'infrastructure' && <InfrastructurePage />}
             {publicView === 'under-construction' && <UnderConstructionPage />}
-            {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => setPublicView('consultation')} />}
+            {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => handlePublicView('consultation')} />}
+            {publicView === 'drawings' && <DrawingsPage />}
           </main>
-          <PublicFooter onChatClick={() => { setPublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
+          <PublicFooter onChatClick={() => { handlePublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} onDrawingsClick={() => { handlePublicView('drawings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
           <AIChatbotWidget />
         </>
       )}

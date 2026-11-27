@@ -66,6 +66,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
           {[
             { id: 'home', label: 'Home' },
             { id: 'services', label: 'Services & Rates (₹)' },
+            { id: 'drawings', label: 'House Drawings' },
             { id: 'consultation', label: 'Book Inspection' },
             { id: 'gallery', label: 'Before & After' },
             { id: 'blogs', label: 'Pest Science Blog' }
@@ -194,6 +195,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
               {[
                 { id: 'home', label: 'Home' },
                 { id: 'services', label: 'Services & Rates (₹)' },
+                { id: 'drawings', label: 'House Drawings' },
                 { id: 'consultation', label: 'Book Inspection' },
                 { id: 'gallery', label: 'Before & After' },
                 { id: 'blogs', label: 'Pest Science Blog' }
