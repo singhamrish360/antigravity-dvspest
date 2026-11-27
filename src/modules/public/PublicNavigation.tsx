@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Menu, X, MessageCircle, Phone } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
+import { handleInternalNav } from '../../seo/navigate';
 
 interface Props {
   activeView: string;
@@ -90,6 +91,8 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
           align-items: center;
           gap: 0.25rem;
         }
+        a.site-nav-link { text-decoration: none; display: inline-flex; align-items: center; }
+        a.site-brand { text-decoration: none; color: inherit; }
         .site-nav-link {
           background: none;
           border: none;
@@ -142,7 +145,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
       `}} />
 
       <div className="site-header-inner">
-        <button type="button" className="site-brand" onClick={() => go('home')}>
+        <a href="/" className="site-brand" onClick={(event) => { handleInternalNav(event, '/'); go('home'); }}>
           <div className="site-brand-mark">
             <Shield size={20} />
           </div>
@@ -150,10 +153,20 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             <div className="site-brand-name">DVS Pest Control</div>
             <div className="site-brand-sub">Lucknow</div>
           </div>
-        </button>
+        </a>
 
         <nav className="site-desktop-nav" aria-label="Main">
           {NAV_LINKS.map(item => (
+            item.id === 'drawings' ? (
+              <a
+                key={item.id}
+                href="/drawings"
+                className={`site-nav-link${activeView === 'drawings' ? ' is-active' : ''}`}
+                onClick={(event) => { handleInternalNav(event, '/drawings'); go('drawings'); }}
+              >
+                {item.label}
+              </a>
+            ) : (
             <button
               key={item.id}
               type="button"
@@ -162,6 +175,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             >
               {item.label}
             </button>
+            )
           ))}
         </nav>
 
@@ -190,6 +204,16 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             Home
           </button>
           {NAV_LINKS.map(item => (
+            item.id === 'drawings' ? (
+              <a
+                key={item.id}
+                href="/drawings"
+                className={`site-nav-link${activeView === 'drawings' ? ' is-active' : ''}`}
+                onClick={(event) => { handleInternalNav(event, '/drawings'); go('drawings'); }}
+              >
+                {item.label}
+              </a>
+            ) : (
             <button
               key={item.id}
               type="button"
@@ -198,6 +222,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             >
               {item.label}
             </button>
+            )
           ))}
           <a
             href={PHONE_TEL}

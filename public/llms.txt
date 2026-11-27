@@ -1,0 +1,29 @@
+# DVS Pest Control Infrastructure Co
+
+> A Lucknow business with two public services: pest control in Lucknow and Uttar Pradesh, and online house-drawing (AutoCAD) work delivered anywhere in India.
+
+The website is https://pestcontrolinfra.co.in
+Contact: +91 93304 78897 (call or WhatsApp). Email: dvsinfrapest@gmail.com
+
+## House drawings
+
+- Page: https://pestcontrolinfra.co.in/drawings
+- Hindi page: https://pestcontrolinfra.co.in/drawings/ghar-ka-naksha
+- 2D AutoCAD house plans, sections and elevations, including plumbing and electrical drawings: ₹6 per sq ft of built-up area.
+- 3D front elevation: a flat ₹6,000 for any size, when existing drawings are available or when the 2D set is also being drafted.
+- Delivered online as DWG and PDF files, anywhere in India, in 10 days.
+- The fee includes up to 2 to 3 major revisions and 4 to 5 minor revisions.
+- Drawings by Amrish Singh, B.Tech Civil, M.Tech Structural Engineering, Lucknow.
+- Sample drawings are shown on the drawings pages. Plans are drafted to the plot size and notes the client sends; they are not ready-made catalogue plans.
+- Structural design and municipal approval filing are not included in the standard 2D fee.
+- Vastu pages give general, commonly cited guidance only. They are not a site-specific Vastu study.
+
+## Pest control
+
+- Page: https://pestcontrolinfra.co.in/
+- Pest control for homes and businesses in Lucknow and Uttar Pradesh, including cockroach, termite, rodent, mosquito and related treatments.
+- Call or WhatsApp +91 93304 78897 to book an inspection.
+
+## Optional
+
+- Sitemap: https://pestcontrolinfra.co.in/sitemap.xml

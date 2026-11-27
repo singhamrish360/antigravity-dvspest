@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield, Phone, Mail, MapPin, MessageCircle, PencilRuler } from 'lucide-react';
 import { store } from '../../core/store';
 import { NavigationMode } from '../../core/types';
+import { handleInternalNav } from '../../seo/navigate';
 
 interface Props {
   onChatClick?: () => void;
@@ -91,9 +92,9 @@ export const PublicFooter: React.FC<Props> = ({
             )}
             {onDrawingsClick && (
               <li>
-                <button type="button" style={linkBtn} onClick={onDrawingsClick}>
+                <a href="/drawings" style={{ ...linkBtn, textDecoration: 'none' }} onClick={(event) => { handleInternalNav(event, '/drawings'); onDrawingsClick(); }}>
                   <PencilRuler size={16} /> House Drawings
-                </button>
+                </a>
               </li>
             )}
             {onChatClick && (

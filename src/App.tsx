@@ -11,6 +11,12 @@ import { InfrastructurePage } from './modules/public/InfrastructurePage';
 import { UnderConstructionPage } from './modules/public/UnderConstructionPage';
 import { VirtualTwinPage } from './modules/public/VirtualTwinPage';
 import { DrawingsPage } from './modules/public/DrawingsPage';
+import { DrawingsLandingPage } from './modules/public/DrawingsLandingPage';
+import { DRAWINGS_HUB, matchSeoRoute, normalizePath } from './seo/routes';
+import { drawingsHead, homeHead } from './seo/head';
+import { draftingJsonLd, pestControlJsonLd } from './seo/jsonld';
+import { usePageSeo } from './seo/usePageSeo';
+import { SITE_URL } from './seo/constants';
 import { CustomerDirectory } from './modules/crm/CustomerDirectory';
 import { CustomerProfileDetail } from './modules/crm/CustomerProfileDetail';
 import { LeadPipeline } from './modules/crm/LeadPipeline';
@@ -24,19 +30,49 @@ import { security } from './core/security';
 
 export const App: React.FC = () => {
   const [mode, setMode] = useState<NavigationMode>('public');
-  const initialPublicView = typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '') === '/drawings'
-    ? 'drawings'
-    : 'home';
+  const initialPath = typeof window !== 'undefined' ? normalizePath(window.location.pathname) : '/';
+  const initialPublicView = initialPath === '/drawings' || initialPath.startsWith('/drawings/') ? 'drawings' : 'home';
   const [publicView, setPublicView] = useState(initialPublicView);
+  const [currentPath, setCurrentPath] = useState(initialPath);
+  const seoRoute = matchSeoRoute(currentPath);
+
+  const applyPath = (path: string, view?: string) => {
+    const normalized = normalizePath(path);
+    setCurrentPath(normalized);
+    if (normalized === '/drawings' || normalized.startsWith('/drawings/')) {
+      setPublicView('drawings');
+    } else if (view) {
+      setPublicView(view);
+    } else if (publicView === 'drawings') {
+      setPublicView('home');
+    }
+  };
 
   const handlePublicView = (view: string) => {
-    setPublicView(view);
     const path = view === 'drawings' ? '/drawings' : '/';
+    setPublicView(view);
+    setCurrentPath(path);
     if (window.location.pathname !== path) {
       window.history.pushState({}, '', path);
     }
   };
-  
+
+  const drawingsHeadTags = seoRoute
+    ? drawingsHead(
+        seoRoute.title,
+        seoRoute.description,
+        seoRoute.path,
+        draftingJsonLd(`${SITE_URL}${seoRoute.path}`, seoRoute.faqs),
+        seoRoute.lang,
+      )
+    : currentPath.startsWith('/drawings/')
+      ? drawingsHead(DRAWINGS_HUB.title, DRAWINGS_HUB.description, '/drawings', draftingJsonLd(`${SITE_URL}/drawings`, DRAWINGS_HUB.faqs))
+      : currentPath === '/drawings'
+        ? drawingsHead(DRAWINGS_HUB.title, DRAWINGS_HUB.description, '/drawings', draftingJsonLd(`${SITE_URL}/drawings`, DRAWINGS_HUB.faqs))
+        : homeHead(pestControlJsonLd());
+
+  usePageSeo(mode === 'public' ? drawingsHeadTags : null);
+
   // Security session monitoring
   const [session, setSession] = useState(security.getSession());
   const [showLoginGate, setShowLoginGate] = useState(false);
@@ -52,8 +88,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const onPopState = () => {
-      const path = window.location.pathname.replace(/\/+$/, '') || '/';
-      setPublicView(path === '/drawings' ? 'drawings' : 'home');
+      const path = normalizePath(window.location.pathname);
+      setCurrentPath(path);
+      if (path === '/drawings' || path.startsWith('/drawings/')) {
+        setPublicView('drawings');
+      } else {
+        setPublicView((view) => (view === 'drawings' ? 'home' : view));
+      }
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -104,7 +145,15 @@ export const App: React.FC = () => {
             {publicView === 'infrastructure' && <InfrastructurePage />}
             {publicView === 'under-construction' && <UnderConstructionPage />}
             {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => handlePublicView('consultation')} />}
-            {publicView === 'drawings' && <DrawingsPage />}
+            {publicView === 'drawings' && currentPath === '/drawings' && <DrawingsPage />}
+            {publicView === 'drawings' && seoRoute && seoRoute.kind !== 'hub' && <DrawingsLandingPage route={seoRoute} />}
+            {publicView === 'drawings' && currentPath.startsWith('/drawings/') && !seoRoute && (
+              <div className="page-content-over-game" style={{ maxWidth: '720px', margin: '4rem auto', padding: '2rem 1.5rem', textAlign: 'center' }}>
+                <h1 style={{ fontSize: '1.8rem', marginBottom: '0.75rem' }}>Page not found</h1>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>That drawings page does not exist.</p>
+                <a href="/drawings" style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>Back to house drawings</a>
+              </div>
+            )}
           </main>
           <PublicFooter
             onChatClick={() => { handlePublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
