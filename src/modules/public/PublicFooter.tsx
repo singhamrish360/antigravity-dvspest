@@ -1,12 +1,13 @@
 import React from 'react';
-import { Shield, Phone, Mail, MapPin, CheckCircle2, MessageCircle } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, CheckCircle2, MessageCircle, PencilRuler } from 'lucide-react';
 import { store } from '../../core/store';
 
 interface Props {
   onChatClick?: () => void;
+  onDrawingsClick?: () => void;
 }
 
-export const PublicFooter: React.FC<Props> = ({ onChatClick }) => {
+export const PublicFooter: React.FC<Props> = ({ onChatClick, onDrawingsClick }) => {
   const settings = store.getSettings();
 
   return (
@@ -47,6 +48,16 @@ export const PublicFooter: React.FC<Props> = ({ onChatClick }) => {
               <Mail size={18} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
               <span>{settings.contactEmail}</span>
             </li>
+            {onDrawingsClick && (
+              <li>
+                <button
+                  onClick={onDrawingsClick}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.9rem' }}
+                >
+                  <PencilRuler size={18} style={{ flexShrink: 0 }} /> House Drawings
+                </button>
+              </li>
+            )}
             {onChatClick && (
               <li>
                 <button
