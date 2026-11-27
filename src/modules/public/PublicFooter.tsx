@@ -90,6 +90,11 @@ export const PublicFooter: React.FC<Props> = ({
             {onServicesClick && (
               <li><button type="button" style={linkBtn} onClick={onServicesClick}>Pest Control &amp; Rates</button></li>
             )}
+            <li>
+              <a href="/pest-control" style={{ ...linkBtn, textDecoration: 'none' }} onClick={(event) => handleInternalNav(event, '/pest-control')}>
+                Pest control in Lucknow
+              </a>
+            </li>
             {onDrawingsClick && (
               <li>
                 <a href="/drawings" style={{ ...linkBtn, textDecoration: 'none' }} onClick={(event) => { handleInternalNav(event, '/drawings'); onDrawingsClick(); }}>

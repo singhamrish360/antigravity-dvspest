@@ -27,7 +27,7 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
   };
 
   const isActive = (id: string) =>
-    activeView === id || (id === 'services' && activeView === 'home');
+    activeView === id || (id === 'services' && (activeView === 'home' || activeView === 'pest'));
 
   return (
     <header className="site-header">

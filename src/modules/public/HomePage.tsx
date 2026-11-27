@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ArrowRight, MessageCircle, MapPin, Phone, PencilRuler, Clock, ShieldCheck, BadgeIndianRupee, ChevronDown } from 'lucide-react';
-import { store } from '../../core/store';
+import { initialServices } from '../../core/mockData';
 import { PestBackgroundGame } from './PestBackgroundGame';
+import { PestBrowseLinks } from './PestBrowseLinks';
+import { DRAWINGS_PAGE_CSS } from './drawingsStyles';
+import { handleInternalNav } from '../../seo/navigate';
+import { AREA_NAME_TO_PATH, SERVICE_ID_TO_PATH } from '../../seo/pest-routes';
 
 interface Props {
   onBookClick: () => void;
@@ -16,7 +20,7 @@ const WHATSAPP_URL = 'https://wa.me/919330478897';
 
 export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChatClick, onDrawingsClick }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const services = store.getServices();
+  const services = initialServices;
 
   const faqs = [
     {
@@ -57,7 +61,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
     <>
     <PestBackgroundGame />
     <div className="home-page page-content-over-game" style={{ display: 'flex', flexDirection: 'column', gap: '4.5rem', padding: '0 0 3rem' }}>
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{ __html: DRAWINGS_PAGE_CSS + `
         .home-wrap { max-width: 1120px; margin: 0 auto; width: 100%; padding: 0 1.25rem; }
         .home-hero {
           padding: 3rem 1.25rem 2.5rem;
@@ -150,17 +154,23 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
             </div>
           </div>
 
-          {onDrawingsClick && (
-            <button
-              type="button"
-              onClick={onDrawingsClick}
+          {(
+            <a
+              href="/drawings"
+              onClick={(event) => {
+                handleInternalNav(event, '/drawings');
+                onDrawingsClick?.();
+              }}
               className="glass-card"
               style={{
                 textAlign: 'left',
                 cursor: 'pointer',
                 border: '1px solid var(--bg-glass-border)',
                 background: '#fff',
-                width: '100%'
+                width: '100%',
+                textDecoration: 'none',
+                color: 'inherit',
+                display: 'block'
               }}
             >
               <span className="badge badge-info" style={{ marginBottom: '0.85rem' }}>Also from DVS</span>
@@ -176,7 +186,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
               <span style={{ color: 'var(--accent-primary)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                 See drawings and sample work <ArrowRight size={16} />
               </span>
-            </button>
+            </a>
           )}
         </div>
       </section>
@@ -185,7 +195,11 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>Our pest control services</h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
-            Treatment packages with starting rates for homes and commercial properties in Lucknow.
+            Treatment packages with starting rates for homes and commercial properties in Lucknow.{' '}
+            <a href="/pest-control" onClick={(event) => handleInternalNav(event, '/pest-control')} style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>
+              Pest control in Lucknow
+            </a>
+            {' '}lists every service and locality page.
           </p>
         </div>
         <div className="home-services-grid">
@@ -193,7 +207,13 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
             <div key={srv.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
               {srv.isPopular && <div className="badge badge-warning" style={{ alignSelf: 'flex-start', marginBottom: '0.75rem' }}>Popular</div>}
               <div style={serviceImageStyle(srv.id)} role="img" aria-label={srv.title} />
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{srv.title}</h3>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
+                {SERVICE_ID_TO_PATH[srv.id] ? (
+                  <a href={SERVICE_ID_TO_PATH[srv.id]} onClick={(event) => handleInternalNav(event, SERVICE_ID_TO_PATH[srv.id])} style={{ color: 'inherit', textDecoration: 'none' }}>
+                    {srv.title}
+                  </a>
+                ) : srv.title}
+              </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', marginBottom: '1.1rem', flexGrow: 1, lineHeight: 1.55 }}>
                 {srv.description}
               </p>
@@ -249,12 +269,24 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
             'Gomti Nagar', 'Hazratganj', 'Indira Nagar', 'Alambagh',
             'Jankipuram', 'Mahanagar', 'Ashiyana', 'Vikas Nagar',
             'Chowk', 'Charbagh', 'Chinhat', 'Vrindavan Yojna'
-          ].map(loc => (
-            <div key={loc} className="glass-panel" style={{ padding: '1rem 1rem', textAlign: 'center', background: '#fff' }}>
-              <div style={{ fontWeight: 700 }}>{loc}</div>
-            </div>
-          ))}
+          ].map(loc => {
+            const href = AREA_NAME_TO_PATH[loc];
+            const tileStyle = { padding: '1rem 1rem', textAlign: 'center' as const, background: '#fff', textDecoration: 'none', color: 'inherit', display: 'block' };
+            return href ? (
+              <a key={loc} href={href} onClick={(event) => handleInternalNav(event, href)} className="glass-panel" style={tileStyle}>
+                <div style={{ fontWeight: 700 }}>{loc}</div>
+              </a>
+            ) : (
+              <div key={loc} className="glass-panel" style={tileStyle}>
+                <div style={{ fontWeight: 700 }}>{loc}</div>
+              </div>
+            );
+          })}
         </div>
+      </section>
+
+      <section className="home-wrap">
+        <PestBrowseLinks />
       </section>
 
       <section style={{ maxWidth: '800px', margin: '0 auto', width: '100%', padding: '0 1.25rem' }}>

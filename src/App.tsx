@@ -12,11 +12,14 @@ import { UnderConstructionPage } from './modules/public/UnderConstructionPage';
 import { VirtualTwinPage } from './modules/public/VirtualTwinPage';
 import { DrawingsPage } from './modules/public/DrawingsPage';
 import { DrawingsLandingPage } from './modules/public/DrawingsLandingPage';
+import { PestLandingPage } from './modules/public/PestLandingPage';
 import { DRAWINGS_HUB, matchSeoRoute, normalizePath } from './seo/routes';
-import { drawingsHead, homeHead } from './seo/head';
-import { draftingJsonLd, pestControlJsonLd } from './seo/jsonld';
+import { matchPestRoute } from './seo/pest-routes';
+import { drawingsHead, homeHead, pestHead } from './seo/head';
+import { draftingJsonLd, pestHomeJsonLd, pestPageJsonLd } from './seo/jsonld';
 import { usePageSeo } from './seo/usePageSeo';
 import { SITE_URL } from './seo/constants';
+import { HOME_PEST_FAQS } from './seo/pest-faqs';
 import { CustomerDirectory } from './modules/crm/CustomerDirectory';
 import { CustomerProfileDetail } from './modules/crm/CustomerProfileDetail';
 import { LeadPipeline } from './modules/crm/LeadPipeline';
@@ -31,19 +34,26 @@ import { security } from './core/security';
 export const App: React.FC = () => {
   const [mode, setMode] = useState<NavigationMode>('public');
   const initialPath = typeof window !== 'undefined' ? normalizePath(window.location.pathname) : '/';
-  const initialPublicView = initialPath === '/drawings' || initialPath.startsWith('/drawings/') ? 'drawings' : 'home';
+  const initialPublicView = initialPath === '/drawings' || initialPath.startsWith('/drawings/')
+    ? 'drawings'
+    : initialPath.startsWith('/pest-control')
+      ? 'pest'
+      : 'home';
   const [publicView, setPublicView] = useState(initialPublicView);
   const [currentPath, setCurrentPath] = useState(initialPath);
   const seoRoute = matchSeoRoute(currentPath);
+  const pestRoute = matchPestRoute(currentPath);
 
   const applyPath = (path: string, view?: string) => {
     const normalized = normalizePath(path);
     setCurrentPath(normalized);
     if (normalized === '/drawings' || normalized.startsWith('/drawings/')) {
       setPublicView('drawings');
+    } else if (normalized.startsWith('/pest-control')) {
+      setPublicView('pest');
     } else if (view) {
       setPublicView(view);
-    } else if (publicView === 'drawings') {
+    } else if (publicView === 'drawings' || publicView === 'pest') {
       setPublicView('home');
     }
   };
@@ -57,21 +67,36 @@ export const App: React.FC = () => {
     }
   };
 
-  const drawingsHeadTags = seoRoute
-    ? drawingsHead(
-        seoRoute.title,
-        seoRoute.description,
-        seoRoute.path,
-        draftingJsonLd(`${SITE_URL}${seoRoute.path}`, seoRoute.faqs),
-        seoRoute.lang,
+  const publicHeadTags = pestRoute
+    ? pestHead(
+        pestRoute.title,
+        pestRoute.description,
+        pestRoute.path,
+        pestPageJsonLd({
+          pageUrl: `${SITE_URL}${pestRoute.path}`,
+          serviceName: pestRoute.serviceName,
+          serviceType: pestRoute.serviceType,
+          description: pestRoute.description,
+          faqs: pestRoute.faqs,
+          areaName: pestRoute.areaName,
+        }),
+        pestRoute.lang,
       )
-    : currentPath.startsWith('/drawings/')
-      ? drawingsHead(DRAWINGS_HUB.title, DRAWINGS_HUB.description, '/drawings', draftingJsonLd(`${SITE_URL}/drawings`, DRAWINGS_HUB.faqs))
-      : currentPath === '/drawings'
+    : seoRoute
+      ? drawingsHead(
+          seoRoute.title,
+          seoRoute.description,
+          seoRoute.path,
+          draftingJsonLd(`${SITE_URL}${seoRoute.path}`, seoRoute.faqs),
+          seoRoute.lang,
+        )
+      : currentPath.startsWith('/drawings/')
         ? drawingsHead(DRAWINGS_HUB.title, DRAWINGS_HUB.description, '/drawings', draftingJsonLd(`${SITE_URL}/drawings`, DRAWINGS_HUB.faqs))
-        : homeHead(pestControlJsonLd());
+        : currentPath === '/drawings'
+          ? drawingsHead(DRAWINGS_HUB.title, DRAWINGS_HUB.description, '/drawings', draftingJsonLd(`${SITE_URL}/drawings`, DRAWINGS_HUB.faqs))
+          : homeHead(pestHomeJsonLd(HOME_PEST_FAQS));
 
-  usePageSeo(mode === 'public' ? drawingsHeadTags : null);
+  usePageSeo(mode === 'public' ? publicHeadTags : null);
 
   // Security session monitoring
   const [session, setSession] = useState(security.getSession());
@@ -92,8 +117,10 @@ export const App: React.FC = () => {
       setCurrentPath(path);
       if (path === '/drawings' || path.startsWith('/drawings/')) {
         setPublicView('drawings');
+      } else if (path.startsWith('/pest-control')) {
+        setPublicView('pest');
       } else {
-        setPublicView((view) => (view === 'drawings' ? 'home' : view));
+        setPublicView((view) => (view === 'drawings' || view === 'pest' ? 'home' : view));
       }
     };
     window.addEventListener('popstate', onPopState);
@@ -145,6 +172,14 @@ export const App: React.FC = () => {
             {publicView === 'infrastructure' && <InfrastructurePage />}
             {publicView === 'under-construction' && <UnderConstructionPage />}
             {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => handlePublicView('consultation')} />}
+            {publicView === 'pest' && pestRoute && <PestLandingPage route={pestRoute} />}
+            {publicView === 'pest' && !pestRoute && (
+              <div className="page-content-over-game" style={{ maxWidth: '720px', margin: '4rem auto', padding: '2rem 1.5rem', textAlign: 'center' }}>
+                <h1 style={{ fontSize: '1.8rem', marginBottom: '0.75rem' }}>Page not found</h1>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>That pest control page does not exist.</p>
+                <a href="/" style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>Back to pest control</a>
+              </div>
+            )}
             {publicView === 'drawings' && currentPath === '/drawings' && <DrawingsPage />}
             {publicView === 'drawings' && seoRoute && seoRoute.kind !== 'hub' && <DrawingsLandingPage route={seoRoute} />}
             {publicView === 'drawings' && currentPath.startsWith('/drawings/') && !seoRoute && (
