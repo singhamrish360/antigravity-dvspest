@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Calculator, Check, Clock, FileText, MessageCircle, Phone, PencilRuler, RefreshCw, Send, Box, X } from 'lucide-react';
+import { BlueprintBackgroundGame } from './BlueprintBackgroundGame';
 
 const PHONE_DISPLAY = '+91 93304 78897';
 const WA_BASE = 'https://wa.me/919330478897';
@@ -162,7 +163,9 @@ export const DrawingsPage: React.FC = () => {
   );
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+    <>
+    <BlueprintBackgroundGame />
+    <div className="page-content-over-game" style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '4rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
         .drawings-pricing-grid {
           display: grid;
@@ -522,5 +525,6 @@ export const DrawingsPage: React.FC = () => {
         <CtaButtons />
       </div>
     </div>
+    </>
   );
 };

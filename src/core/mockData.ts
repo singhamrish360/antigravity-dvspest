@@ -105,7 +105,7 @@ export const initialFeedback: FeedbackRecord[] = [
     rating: 5,
     comment: 'Best pest control service in Lucknow! The technicians came on time and treated our commercial store with odorless gel. Zero roaches seen since!',
     date: '2026-05-16',
-    status: 'Approved',
+    status: 'Pending',
     isPinned: true,
     isFeatured: true
   },
@@ -116,7 +116,7 @@ export const initialFeedback: FeedbackRecord[] = [
     rating: 5,
     comment: 'The termite drill-fill treatment was very neat. They provided a 5-year written warranty. Highly recommended DVS Pest Control Infrastructure Co!',
     date: '2026-02-01',
-    status: 'Approved',
+    status: 'Pending',
     isFeatured: true
   }
 ];

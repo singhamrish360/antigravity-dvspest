@@ -410,7 +410,7 @@ export const VirtualTwinPage: React.FC<Props> = ({ onBookClick }) => {
               <div style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{mode === 'dvs' ? 'DVS Pest Assistant' : 'Amrish Singh — Digital Twin'}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {status === 'processing' ? 'Typing…' : status === 'recording' ? 'Listening…' : status === 'speaking' ? 'Speaking…'
-                  : mode === 'dvs' ? '₹ rates • 2-4 hr dispatch in Lucknow • 8 AM - 9 PM' : 'Experimental persona mode'}
+                  : mode === 'dvs' ? '₹ rates • Quick response across Lucknow • 8 AM - 9 PM' : 'Experimental persona mode'}
               </div>
             </div>
           </div>
