@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, MessageCircle, MapPin, Phone, PencilRuler, Clock, ShieldCheck, BadgeIndianRupee, ChevronDown } from 'lucide-react';
 import { store } from '../../core/store';
+import { PestBackgroundGame } from './PestBackgroundGame';
 
 interface Props {
   onBookClick: () => void;
@@ -53,7 +54,9 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
   });
 
   return (
-    <div className="home-page" style={{ display: 'flex', flexDirection: 'column', gap: '4.5rem', padding: '0 0 3rem' }}>
+    <>
+    <PestBackgroundGame />
+    <div className="home-page page-content-over-game" style={{ display: 'flex', flexDirection: 'column', gap: '4.5rem', padding: '0 0 3rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
         .home-wrap { max-width: 1120px; margin: 0 auto; width: 100%; padding: 0 1.25rem; }
         .home-hero {
@@ -297,5 +300,6 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
         </section>
       )}
     </div>
+    </>
   );
 };
