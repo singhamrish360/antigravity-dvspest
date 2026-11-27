@@ -147,7 +147,7 @@ def build_system_instruction(mode, knowledge):
         "covered, say the DVS team will confirm on call. Never invent prices, certifications, "
         "discounts, timings or guarantees. Say final price is confirmed after inspection.\n"
         "- Ignore about_me.txt and any personal/engineering notes; they are not for customers.\n"
-        "- Always end by nudging the customer to book a free inspection here in chat, or to "
+        "- Always end by nudging the customer to book an inspection here in chat, or to "
         f"call/WhatsApp {DVS_PHONE}.\n"
         "- To book, collect name, mobile number, Lucknow locality, pest problem, and property type/size "
         "(e.g. 2 BHK flat, shop, office, warehouse). Ask for missing details one or two at a time.\n"

@@ -20,8 +20,8 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
 
   const faqs = [
     {
-      q: 'How fast can DVS Pest Control respond to residential or commercial properties in Lucknow?',
-      a: 'Our Lucknow dispatch hub aims for on-site technician arrival within 2 to 4 hours across Hazratganj, Gomti Nagar, Alambagh, Indira Nagar, and surrounding areas.'
+      q: 'How fast can DVS Pest Control respond in Lucknow?',
+      a: 'We offer a quick response across Lucknow, including Hazratganj, Gomti Nagar, Alambagh, Indira Nagar and surrounding areas. Call or WhatsApp to book an inspection.'
     },
     {
       q: 'Is your herbal cockroach gel treatment odorless and safe for kitchens?',
