@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && node scripts/prerender.mjs && node scripts/verify-prerender.mjs",
+    "build": "tsc && vite build && node scripts/prerender.mjs && node scripts/seo-site-infra.mjs && node scripts/verify-prerender.mjs && node scripts/verify-seo-infra.mjs",
     "lint": "tsc",
     "preview": "vite preview",
     "prerender": "node scripts/prerender.mjs",
-    "verify:prerender": "node scripts/verify-prerender.mjs"
+    "verify:prerender": "node scripts/verify-prerender.mjs",
+    "verify:seo-infra": "node scripts/verify-seo-infra.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
