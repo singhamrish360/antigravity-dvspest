@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Shield, LayoutDashboard, Bot, LogIn, Menu, X, MessageCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Shield, Menu, X, MessageCircle, Phone } from 'lucide-react';
 import { NavigationMode } from '../../core/types';
-import { security } from '../../core/security';
 
 interface Props {
   activeView: string;
@@ -9,277 +8,212 @@ interface Props {
   setMode: (mode: NavigationMode) => void;
 }
 
-export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, setMode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(security.getSession().isAuthenticated);
+const PHONE_TEL = 'tel:+919330478897';
+
+const NAV_LINKS = [
+  { id: 'services', label: 'Pest Control' },
+  { id: 'drawings', label: 'House Drawings' },
+  { id: 'virtual-twin', label: 'Chat' },
+  { id: 'consultation', label: 'Contact' },
+];
+
+export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, setMode: _setMode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // Sync session state changes
-    const unsubscribe = security.subscribe(() => {
-      setIsAuthenticated(security.getSession().isAuthenticated);
-    });
-    return unsubscribe;
-  }, []);
+  const go = (view: string) => {
+    setActiveView(view);
+    setIsMobileMenuOpen(false);
+  };
+
+  const isActive = (id: string) =>
+    activeView === id || (id === 'services' && activeView === 'home');
 
   return (
-    <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>
-      
-      {/* Media Queries Styling block */}
+    <header className="site-header">
       <style dangerouslySetInnerHTML={{ __html: `
-        @media (max-width: 991px) {
-          .desktop-nav { display: none !important; }
-          .desktop-actions { display: none !important; }
-          .mobile-toggle-btn { display: flex !important; }
+        .site-header {
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          background: rgba(255, 255, 255, 0.96);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid var(--bg-glass-border);
         }
-        @media (min-width: 992px) {
-          .desktop-nav { display: flex !important; }
-          .desktop-actions { display: flex !important; }
-          .mobile-toggle-btn { display: none !important; }
-          .mobile-drawer { display: none !important; }
+        .site-header-inner {
+          max-width: 1120px;
+          margin: 0 auto;
+          padding: 0.75rem 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
         }
-        @media (max-width: 576px) {
-          .brand-text-title { font-size: 0.95rem !important; }
-          .brand-text-sub { font-size: 0.6rem !important; }
-          .brand-logo-container { width: 36px !important; height: 36px !important; }
+        .site-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+          cursor: pointer;
+          min-width: 0;
+          background: none;
+          border: none;
+          padding: 0;
+          text-align: left;
+        }
+        .site-brand-mark {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: var(--gradient-brand);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          flex-shrink: 0;
+        }
+        .site-brand-name {
+          font-family: var(--font-heading);
+          font-weight: 800;
+          font-size: 1.05rem;
+          letter-spacing: -0.02em;
+          color: var(--text-primary);
+          line-height: 1.15;
+        }
+        .site-brand-sub {
+          font-size: 0.7rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--text-secondary);
+          margin-top: 1px;
+        }
+        .site-desktop-nav {
+          display: none;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .site-nav-link {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: var(--text-secondary);
+          font-weight: 600;
+          font-size: 0.95rem;
+          padding: 0.45rem 0.75rem;
+          border-radius: 999px;
+          font-family: var(--font-body);
+        }
+        .site-nav-link.is-active {
+          color: var(--accent-primary-hover);
+          background: rgba(217, 119, 6, 0.08);
+        }
+        .site-header-actions {
+          display: none;
+          align-items: center;
+          gap: 0.6rem;
+        }
+        .site-mobile-toggle {
+          display: flex;
+          width: 40px;
+          height: 40px;
+          padding: 0;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-primary);
+          border-color: var(--bg-glass-border);
+        }
+        .site-mobile-drawer {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          padding: 0.75rem 1.25rem 1.25rem;
+          border-top: 1px solid var(--bg-glass-border);
+          background: #fff;
+        }
+        .site-mobile-drawer .site-nav-link {
+          text-align: left;
+          padding: 0.7rem 0.85rem;
+          font-size: 1.05rem;
+        }
+        @media (min-width: 900px) {
+          .site-desktop-nav,
+          .site-header-actions { display: flex !important; }
+          .site-mobile-toggle,
+          .site-mobile-drawer { display: none !important; }
         }
       `}} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', position: 'relative' }}>
-        
-        {/* Brand Logo & Firm Name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }} onClick={() => { setActiveView('home'); setIsMobileMenuOpen(false); }}>
-          <div className="brand-logo-container" style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: 'var(--shadow-glow)', flexShrink: 0 }}>
-            <Shield size={22} />
+      <div className="site-header-inner">
+        <button type="button" className="site-brand" onClick={() => go('home')}>
+          <div className="site-brand-mark">
+            <Shield size={20} />
           </div>
           <div>
-            <div className="brand-text-title" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.02em', background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              DVS PEST CONTROL INFRASTRUCTURE CO
-            </div>
-            <div className="brand-text-sub" style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-secondary)', marginTop: '-2px' }}>
-              HEADQUARTERS: LUCKNOW, UTTAR PRADESH
-            </div>
+            <div className="site-brand-name">DVS Pest Control</div>
+            <div className="site-brand-sub">Lucknow</div>
           </div>
-        </div>
+        </button>
 
-        {/* Public Nav Links (Desktop) */}
-        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
-          {[
-            { id: 'home', label: 'Home' },
-            { id: 'services', label: 'Services & Rates (₹)' },
-            { id: 'drawings', label: 'House Drawings' },
-            { id: 'consultation', label: 'Book Inspection' },
-            { id: 'gallery', label: 'Before & After' },
-            { id: 'blogs', label: 'Pest Science Blog' }
-          ].map(item => (
+        <nav className="site-desktop-nav" aria-label="Main">
+          {NAV_LINKS.map(item => (
             <button
               key={item.id}
-              onClick={() => setActiveView(item.id)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: activeView === item.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                fontWeight: activeView === item.id ? 700 : 500,
-                fontSize: '0.95rem',
-                cursor: 'pointer',
-                transition: 'color var(--transition-fast)',
-                padding: '0.25rem 0'
-              }}
+              type="button"
+              className={`site-nav-link${isActive(item.id) && activeView !== 'home' ? ' is-active' : ''}${item.id === 'services' && activeView === 'services' ? ' is-active' : ''}`}
+              onClick={() => go(item.id)}
             >
               {item.label}
             </button>
           ))}
-          <button
-            onClick={() => setActiveView('virtual-twin')}
-            className="btn btn-sm"
-            style={{
-              background: activeView === 'virtual-twin' ? 'var(--accent-primary)' : '#fffbeb',
-              color: activeView === 'virtual-twin' ? '#fff' : 'var(--accent-primary)',
-              border: '1px solid var(--accent-primary)',
-              borderRadius: 'var(--radius-full)',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <MessageCircle size={15} /> Chat with DVS
-          </button>
         </nav>
 
-        {/* Action Controls (Desktop) */}
-        <div className="desktop-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button className="btn btn-outline btn-sm" onClick={() => setMode('ai')}>
-            <Bot size={16} /> AI Pest Scan
+        <div className="site-header-actions">
+          <a href={PHONE_TEL} className="btn btn-outline btn-sm" style={{ textDecoration: 'none' }}>
+            <Phone size={15} /> Call
+          </a>
+          <button type="button" className="btn btn-primary btn-sm" onClick={() => go('consultation')}>
+            Book Inspection
           </button>
-
-          {isAuthenticated ? (
-            <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
-              <LayoutDashboard size={16} /> My Dashboard
-            </button>
-          ) : (
-            <button className="btn btn-primary btn-sm" onClick={() => setMode('admin')}>
-              <LogIn size={16} /> Login
-            </button>
-          )}
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', alignItems: 'stretch' }}>
-            <button 
-              className="btn btn-outline btn-sm" 
-              style={{ borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)', padding: '0.25rem 0.75rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
-              onClick={() => { setActiveView('infrastructure'); setMode('public'); }}
-            >
-              Our Infrastructure Page
-            </button>
-            <button 
-              className="btn btn-sm" 
-              style={{ 
-                border: '1px solid var(--accent-secondary)', 
-                color: '#fff', 
-                background: 'linear-gradient(135deg, var(--accent-secondary) 0%, #10b981 100%)',
-                padding: '0.25rem 0.75rem', 
-                fontSize: '0.75rem', 
-                whiteSpace: 'nowrap',
-                fontWeight: 700,
-                boxShadow: '0 0 10px rgba(5, 150, 105, 0.3)'
-              }}
-              onClick={() => { setActiveView('virtual-twin'); setMode('public'); }}
-            >
-              💬 Chat with DVS
-            </button>
-            <button 
-              className="btn btn-sm animate-pulse" 
-              style={{ 
-                border: '1px solid #d97706', 
-                color: '#fff', 
-                background: 'linear-gradient(135deg, #d97706, #f59e0b)',
-                padding: '0.25rem 0.75rem', 
-                fontSize: '0.75rem', 
-                whiteSpace: 'nowrap',
-                fontWeight: 800,
-                boxShadow: '0 0 10px rgba(217, 119, 6, 0.4)'
-              }}
-              onClick={() => { setActiveView('under-construction'); setMode('public'); }}
-            >
-              🏗️ Live Civil Infrastructure
-            </button>
-          </div>
         </div>
 
-        {/* Mobile Toggle Button */}
-        <button 
-          className="mobile-toggle-btn btn btn-outline btn-sm" 
-          style={{ display: 'none', width: '40px', height: '40px', padding: 0, alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', borderColor: 'var(--bg-glass-border)' }}
+        <button
+          type="button"
+          className="site-mobile-toggle btn btn-outline btn-sm"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-
-        {/* Mobile Drawer Dropdown */}
-        {isMobileMenuOpen && (
-          <div className="mobile-drawer" style={{ 
-            background: 'rgba(255, 255, 255, 0.98)', 
-            backdropFilter: 'blur(10px)', 
-            borderBottom: '1px solid var(--bg-glass-border)', 
-            padding: '1.5rem', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '1.25rem',
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            boxShadow: 'var(--shadow-lg)',
-            zIndex: 99
-          }}>
-            {/* Nav links */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderBottom: '1px solid var(--bg-glass-border)', paddingBottom: '1rem' }}>
-              {[
-                { id: 'home', label: 'Home' },
-                { id: 'services', label: 'Services & Rates (₹)' },
-                { id: 'drawings', label: 'House Drawings' },
-                { id: 'consultation', label: 'Book Inspection' },
-                { id: 'gallery', label: 'Before & After' },
-                { id: 'blogs', label: 'Pest Science Blog' }
-              ].map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => { setActiveView(item.id); setIsMobileMenuOpen(false); }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    textAlign: 'left',
-                    color: activeView === item.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                    fontWeight: activeView === item.id ? 700 : 500,
-                    fontSize: '1rem',
-                    cursor: 'pointer',
-                    padding: '0.25rem 0'
-                  }}
-                >
-                  {item.label}
-                </button>
-              ))}
-              <button
-                className="btn btn-primary"
-                style={{ justifyContent: 'center', fontWeight: 700 }}
-                onClick={() => { setActiveView('virtual-twin'); setIsMobileMenuOpen(false); }}
-              >
-                <MessageCircle size={16} /> Chat with DVS
-              </button>
-            </div>
-
-            {/* Actions Stack */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <button className="btn btn-outline btn-sm" style={{ justifyContent: 'center' }} onClick={() => { setMode('ai'); setIsMobileMenuOpen(false); }}>
-                <Bot size={16} /> AI Pest Scan
-              </button>
-
-              {isAuthenticated ? (
-                <button className="btn btn-primary btn-sm" style={{ justifyContent: 'center' }} onClick={() => { setMode('admin'); setIsMobileMenuOpen(false); }}>
-                  <LayoutDashboard size={16} /> My Dashboard
-                </button>
-              ) : (
-                <button className="btn btn-primary btn-sm" style={{ justifyContent: 'center' }} onClick={() => { setMode('admin'); setIsMobileMenuOpen(false); }}>
-                  <LogIn size={16} /> Login
-                </button>
-              )}
-
-              <button 
-                className="btn btn-outline btn-sm" 
-                style={{ borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)', justifyContent: 'center' }}
-                onClick={() => { setActiveView('infrastructure'); setMode('public'); setIsMobileMenuOpen(false); }}
-              >
-                Our Infrastructure Page
-              </button>
-              <button 
-                className="btn btn-sm" 
-                style={{ 
-                  border: '1px solid var(--accent-secondary)', 
-                  color: '#fff', 
-                  background: 'linear-gradient(135deg, var(--accent-secondary) 0%, #10b981 100%)',
-                  justifyContent: 'center',
-                  fontWeight: 700
-                }}
-                onClick={() => { setActiveView('virtual-twin'); setMode('public'); setIsMobileMenuOpen(false); }}
-              >
-                💬 Chat with DVS
-              </button>
-              <button 
-                className="btn btn-sm" 
-                style={{ 
-                  border: '1px solid #d97706', 
-                  color: '#fff', 
-                  background: 'linear-gradient(135deg, #d97706, #f59e0b)',
-                  justifyContent: 'center',
-                  fontWeight: 800
-                }}
-                onClick={() => { setActiveView('under-construction'); setMode('public'); setIsMobileMenuOpen(false); }}
-              >
-                🏗️ Live Civil Infrastructure
-              </button>
-            </div>
-          </div>
-        )}
-
       </div>
+
+      {isMobileMenuOpen && (
+        <div className="site-mobile-drawer">
+          <button type="button" className={`site-nav-link${activeView === 'home' ? ' is-active' : ''}`} onClick={() => go('home')}>
+            Home
+          </button>
+          {NAV_LINKS.map(item => (
+            <button
+              key={item.id}
+              type="button"
+              className={`site-nav-link${activeView === item.id ? ' is-active' : ''}`}
+              onClick={() => go(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+          <a
+            href={PHONE_TEL}
+            className="btn btn-outline"
+            style={{ textDecoration: 'none', justifyContent: 'center', marginTop: '0.5rem' }}
+          >
+            <Phone size={16} /> Call +91 93304 78897
+          </a>
+          <button type="button" className="btn btn-primary" style={{ justifyContent: 'center' }} onClick={() => go('consultation')}>
+            Book Inspection
+          </button>
+          <button type="button" className="btn btn-secondary" style={{ justifyContent: 'center' }} onClick={() => go('virtual-twin')}>
+            <MessageCircle size={16} /> Chat with DVS
+          </button>
+        </div>
+      )}
     </header>
   );
 };

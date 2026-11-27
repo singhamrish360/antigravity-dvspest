@@ -1,550 +1,277 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Star, ChevronDown, ArrowRight, Activity, MapPin, Award, Trash2, MessageCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, MessageCircle, MapPin, Phone, PencilRuler, Clock, ShieldCheck, BadgeIndianRupee, ChevronDown } from 'lucide-react';
 import { store } from '../../core/store';
-import { SpaceTelemetryCanvas } from './SpaceTelemetryCanvas';
 
 interface Props {
   onBookClick: () => void;
   onServicesClick: () => void;
   onChatClick?: () => void;
+  onDrawingsClick?: () => void;
 }
 
-interface PestParticle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  type: 'cockroach' | 'rodent' | 'mosquito' | 'termite';
-  size: number;
-  angle: number;
-  color: string;
-  speed: number;
-  isDead: boolean;
-  splatTime: number; // to fade out splats
-}
+const PHONE_DISPLAY = '+91 93304 78897';
+const PHONE_TEL = 'tel:+919330478897';
+const WHATSAPP_URL = 'https://wa.me/919330478897';
 
-export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChatClick }) => {
+export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChatClick, onDrawingsClick }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [splatCount, setSplatCount] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
-  const particlesRef = useRef<PestParticle[]>([]);
-
   const services = store.getServices();
-  const approvedFeedback = store.getFeedback().filter(f => f.status === 'Approved');
-
-  // Interactive Game Canvas: 1000 pests, Evasion & Splat on Click
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Click handler to squish bugs
-    const handleCanvasClick = (e: MouseEvent) => {
-      const clickX = e.clientX;
-      const clickY = e.clientY;
-      const clickRadius = 35; // Click hit box
-
-      let squished = 0;
-      particlesRef.current.forEach(p => {
-        if (!p.isDead) {
-          const dx = p.x - clickX;
-          const dy = p.y - clickY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < clickRadius) {
-            p.isDead = true;
-            p.vx = 0;
-            p.vy = 0;
-            p.splatTime = Date.now();
-            squished++;
-          }
-        }
-      });
-
-      if (squished > 0) {
-        setSplatCount(prev => prev + squished);
-        store.logAudit('PESTS_SQUISHED_GAME', 'Interactive Game', `User exterminated ${squished} bugs in background sandbox`);
-      }
-    };
-    window.addEventListener('mousedown', handleCanvasClick);
-
-    // Initializing 1000 pests
-    const pestTypes: Array<'cockroach' | 'rodent' | 'mosquito' | 'termite'> = ['cockroach', 'rodent', 'mosquito', 'termite'];
-    const colors = {
-      cockroach: '#a0522d', // Reddish Brown
-      rodent: '#696969',    // Slate Grey
-      mosquito: '#1c1c1c',  // Charcoal Black
-      termite: '#e6c280'    // Amber Wood Gold
-    };
-
-    const tempParticles: PestParticle[] = [];
-    const particleCount = 1000;
-
-    for (let i = 0; i < particleCount; i++) {
-      const type = pestTypes[Math.floor(Math.random() * pestTypes.length)];
-      tempParticles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 1.5,
-        vy: (Math.random() - 0.5) * 1.5,
-        type,
-        size: type === 'rodent' ? 8 + Math.random() * 4 : 4 + Math.random() * 3,
-        angle: Math.random() * Math.PI * 2,
-        color: colors[type],
-        speed: type === 'mosquito' ? 2.5 : type === 'cockroach' ? 1.8 : 1.2,
-        isDead: false,
-        splatTime: 0
-      });
-    }
-    particlesRef.current = tempParticles;
-
-    const drawBug = (ctx: CanvasRenderingContext2D, p: PestParticle) => {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-
-      if (p.isDead) {
-        // Render squished bug / splat puddle
-        const timePassed = Date.now() - p.splatTime;
-        const opacity = Math.max(0, 1 - timePassed / 15000); // Fades out over 15 seconds
-
-        ctx.fillStyle = p.type === 'cockroach' ? `rgba(139, 69, 19, ${opacity * 0.7})` : `rgba(105, 105, 105, ${opacity * 0.7})`;
-        ctx.beginPath();
-        // Irregular splat puddle
-        ctx.arc(0, 0, p.size * 1.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Small splat droplets
-        for (let j = 0; j < 5; j++) {
-          const dropAngle = (j * Math.PI * 2) / 5;
-          const dist = p.size * 1.3;
-          ctx.beginPath();
-          ctx.arc(Math.cos(dropAngle) * dist, Math.sin(dropAngle) * dist, p.size * 0.3, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-        return;
-      }
-
-      ctx.fillStyle = p.color;
-
-      if (p.type === 'cockroach') {
-        // Cockroach: Oval body, legs, antenna
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = 1;
-        for (let i = -1; i <= 1; i++) {
-          ctx.beginPath();
-          ctx.moveTo(i * 3, 0);
-          ctx.lineTo(i * 3 + (i * 2), -p.size);
-          ctx.moveTo(i * 3, 0);
-          ctx.lineTo(i * 3 + (i * 2), p.size);
-          ctx.stroke();
-        }
-        ctx.beginPath();
-        ctx.moveTo(p.size, -1);
-        ctx.lineTo(p.size * 1.8, -p.size * 0.7);
-        ctx.moveTo(p.size, 1);
-        ctx.lineTo(p.size * 1.8, p.size * 0.7);
-        ctx.stroke();
-
-      } else if (p.type === 'rodent') {
-        // Rodent: Body, tail, ears
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.strokeStyle = '#e9a1a1';
-        ctx.lineWidth = 1.2;
-        ctx.moveTo(-p.size, 0);
-        ctx.quadraticCurveTo(-p.size * 1.5, Math.sin(Date.now() * 0.01) * 3, -p.size * 2, 0);
-        ctx.stroke();
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.size * 0.3, -p.size * 0.4, 2, 0, Math.PI * 2);
-        ctx.arc(p.size * 0.3, p.size * 0.4, 2, 0, Math.PI * 2);
-        ctx.fill();
-
-      } else if (p.type === 'mosquito') {
-        // Mosquito: body, proboscis, wings
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size * 0.6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.strokeStyle = p.color;
-        ctx.moveTo(0, 0);
-        ctx.lineTo(p.size * 1.5, 0);
-        ctx.stroke();
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.beginPath();
-        ctx.ellipse(0, -p.size * 0.4, p.size * 0.8, p.size * 0.3, -Math.PI / 4, 0, Math.PI * 2);
-        ctx.ellipse(0, p.size * 0.4, p.size * 0.8, p.size * 0.3, Math.PI / 4, 0, Math.PI * 2);
-        ctx.fill();
-
-      } else if (p.type === 'termite') {
-        // Termite: segmented
-        ctx.beginPath();
-        ctx.arc(-p.size * 0.4, 0, p.size * 0.4, 0, Math.PI * 2);
-        ctx.arc(0, 0, p.size * 0.3, 0, Math.PI * 2);
-        ctx.arc(p.size * 0.4, 0, p.size * 0.4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    };
-
-    const update = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      const mouse = mouseRef.current;
-      const evasionRadius = 160;
-      const evasionForce = 5.5;
-
-      for (let i = 0; i < particlesRef.current.length; i++) {
-        const p = particlesRef.current[i];
-
-        if (p.isDead) {
-          drawBug(ctx, p);
-          continue;
-        }
-
-        // Evasion logic from cursor
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < evasionRadius) {
-          const force = (evasionRadius - dist) / evasionRadius;
-          const angle = Math.atan2(dy, dx);
-          p.vx += Math.cos(angle) * force * evasionForce;
-          p.vy += Math.sin(angle) * force * evasionForce;
-          p.angle = angle;
-        } else {
-          p.vx += (Math.random() - 0.5) * 0.3;
-          p.vy += (Math.random() - 0.5) * 0.3;
-
-          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (speed > p.speed) {
-            p.vx *= 0.91;
-            p.vy *= 0.91;
-          }
-          if (speed > 0.1) {
-            p.angle = Math.atan2(p.vy, p.vx);
-          }
-        }
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < -20) p.x = width + 20;
-        if (p.x > width + 20) p.x = -20;
-        if (p.y < -20) p.y = height + 20;
-        if (p.y > height + 20) p.y = -20;
-
-        drawBug(ctx, p);
-      }
-
-      animationFrameId = requestAnimationFrame(update);
-    };
-
-    update();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleCanvasClick);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
 
   const faqs = [
     {
       q: 'How fast can DVS Pest Control respond to residential or commercial properties in Lucknow?',
-      a: 'Our Lucknow dispatch hub guarantees on-site technician arrival within 2 to 4 hours across Hazratganj, Gomti Nagar, Alambagh, Indira Nagar, and all surrounding UP zones.'
+      a: 'Our Lucknow dispatch hub aims for on-site technician arrival within 2 to 4 hours across Hazratganj, Gomti Nagar, Alambagh, Indira Nagar, and surrounding areas.'
     },
     {
       q: 'Is your herbal cockroach gel treatment odorless and safe for kitchens?',
-      a: 'Yes! Our herbal gel application for cockroaches control is 100% odorless, non-toxic, eco-friendly, and safe for children, pets, and commercial food preparation areas.'
+      a: 'Yes. Our herbal gel application for cockroach control is described as odorless and suitable for kitchens, children and pets. Please tell us about any specific concerns when you book.'
     },
     {
-      q: 'What does the 5-Year Subterranean Termites Barrier Warranty include?',
-      a: 'Our Drill-Fill-Seal subterranean termite treatment comes with an unconditional 5-year written warranty certificate, including annual complimentary thermal moisture scans.'
+      q: 'What does the 5-year subterranean termite warranty include?',
+      a: 'The drill-fill-seal subterranean termite treatment is offered with a 5-year written warranty, including annual inspection checks.'
     },
     {
       q: 'What types of fumigation services does DVS offer for industrial warehouses?',
-      a: 'We specialize in Phosphine gas fumigation for food processing units, grain stores, and commercial warehouses in Lucknow & UP, providing full FSSAI and Plant Quarantine compliance certification.'
+      a: 'We offer fumigation for food processing units, grain stores and commercial warehouses in Lucknow and Uttar Pradesh. Ask us about the certificates needed for your site when you enquire.'
     }
   ];
 
+  const serviceImageStyle = (id: string): React.CSSProperties => ({
+    width: '100%',
+    height: '180px',
+    borderRadius: 'var(--radius-sm)',
+    marginBottom: '1.25rem',
+    backgroundImage: 'url(/services-grid.jpg)',
+    backgroundSize: '200% 200%',
+    backgroundPosition:
+      id === 'SRV-101' ? '0% 0%' :
+      id === 'SRV-102' ? '100% 0%' :
+      id === 'SRV-103' || id === 'SRV-105' ? '0% 100%' :
+      '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    border: '1px solid var(--bg-glass-border)'
+  });
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem', paddingBottom: '4rem', position: 'relative' }}>
-      
-      {/* High-Performance Game Canvas */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 1,
-          cursor: 'crosshair',
-          opacity: 0.5
-        }}
-      />
-
-      {/* Floating Extermination Score Badge */}
-      {splatCount > 0 && (
-        <div style={{
-          position: 'fixed',
-          top: '90px',
-          right: '2rem',
-          zIndex: 100,
-          background: 'var(--gradient-brand)',
-          color: '#fff',
-          padding: '0.65rem 1.25rem',
-          borderRadius: 'var(--radius-full)',
-          fontWeight: 800,
-          fontSize: '0.95rem',
-          boxShadow: 'var(--shadow-lg)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          animation: 'fadeIn 0.2s ease'
-        }}>
-          <Award size={18} /> Pests Exterminated: {splatCount}
-        </div>
-      )}
-
-      {/* Hero Section */}
+    <div className="home-page" style={{ display: 'flex', flexDirection: 'column', gap: '4.5rem', padding: '0 0 3rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
-        .hero-grid {
-          display: grid !important;
-          grid-template-columns: 1fr 1fr !important;
+        .home-wrap { max-width: 1120px; margin: 0 auto; width: 100%; padding: 0 1.25rem; }
+        .home-hero {
+          padding: 3rem 1.25rem 2.5rem;
         }
-        @media (max-width: 991px) {
-          .hero-grid {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
-          }
+        .home-hero-inner {
+          max-width: 1120px;
+          margin: 0 auto;
+          display: grid;
+          gap: 2rem;
+        }
+        .home-hero h1 {
+          font-size: clamp(2rem, 5vw, 3rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          margin: 0 0 1rem;
+        }
+        .home-hero-lead {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          line-height: 1.65;
+          max-width: 38rem;
+          margin-bottom: 1.75rem;
+        }
+        .home-cta-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+        .home-offer-grid {
+          display: grid;
+          gap: 1rem;
+        }
+        .home-why-grid,
+        .home-areas-grid,
+        .home-services-grid {
+          display: grid;
+          gap: 1.25rem;
+        }
+        .home-services-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (max-width: 899px) {
+          .home-cta-desktop { display: none !important; }
+        }
+        @media (min-width: 700px) {
+          .home-offer-grid { grid-template-columns: 1fr 1fr; }
+          .home-why-grid { grid-template-columns: repeat(2, 1fr); }
+          .home-areas-grid { grid-template-columns: repeat(3, 1fr); }
+          .home-services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+          .home-hero-inner { grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 3rem; }
+          .home-why-grid { grid-template-columns: repeat(4, 1fr); }
+          .home-areas-grid { grid-template-columns: repeat(4, 1fr); }
+          .home-services-grid { grid-template-columns: repeat(3, 1fr); }
         }
       `}} />
-      <section style={{ position: 'relative', padding: '5rem 1.5rem', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-surface)', border: '1px solid var(--bg-glass-border)', boxShadow: 'var(--shadow-md)', zIndex: 3 }}>
-        <div className="hero-grid" style={{ maxWidth: '1280px', margin: '0 auto', gap: '3rem', alignItems: 'center', position: 'relative', zIndex: 3 }}>
+
+      <section className="home-hero">
+        <div className="home-hero-inner">
           <div>
-            <div className="badge badge-warning" style={{ marginBottom: '1.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-              <MapPin size={14} /> Lucknow, UP Headquarters • Enterprise Infrastructure
+            <div className="badge badge-warning" style={{ marginBottom: '1.1rem' }}>
+              <MapPin size={14} /> Lucknow, Uttar Pradesh
             </div>
-            <h1 style={{ fontSize: '3rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-              DVS PEST CONTROL <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>SERVICES IN LUCKNOW</span>
+            <h1>
+              Pest control for homes and businesses in Lucknow
             </h1>
-            <p style={{ fontSize: '1.15rem', color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6 }}>
-              DVS Pest Control Infrastructure Co provides the best residential and commercial pest control services in Lucknow and Uttar Pradesh. Get professional, eco-friendly cockroach control, termite treatment, rodent exclusion, mosquito control, and warehouse fumigation.
+            <p className="home-hero-lead">
+              DVS Pest Control treats cockroaches, termites, rodents, mosquitoes and does warehouse fumigation. Rates are listed on the site. Call or WhatsApp to book an inspection.
             </p>
-            
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="home-cta-row">
               <button className="btn btn-primary btn-lg" onClick={onBookClick}>
-                Book Inspection <ArrowRight size={20} />
+                Book Inspection <ArrowRight size={18} />
               </button>
-              {onChatClick && (
-                <button className="btn btn-outline btn-lg" onClick={onChatClick}>
-                  <MessageCircle size={20} /> Chat with DVS
-                </button>
-              )}
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-lg home-cta-desktop"
+                style={{ textDecoration: 'none', background: '#16a34a', color: '#fff', border: '1px solid #15803d' }}
+              >
+                <MessageCircle size={18} /> WhatsApp
+              </a>
+              <a href={PHONE_TEL} className="btn btn-outline btn-lg home-cta-desktop" style={{ textDecoration: 'none' }}>
+                <Phone size={18} /> Call {PHONE_DISPLAY}
+              </a>
               <button className="btn btn-secondary btn-lg" onClick={onServicesClick}>
-                Explore Solutions & Rates (₹)
+                View rates
               </button>
             </div>
-
-            <div style={{ display: 'flex', gap: '2rem', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--bg-glass-border)' }}>
-              <div>
-                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)' }}>100%</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Eradication Success</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--accent-secondary)' }}>12,000+</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Properties Treated</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--accent-primary)' }}>5 Years</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Termite Warranty</div>
-              </div>
-            </div>
           </div>
 
-          <div style={{ position: 'relative' }}>
-            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', background: '#090d16', boxShadow: 'var(--shadow-lg)', border: '1px solid #1e293b' }}>
-              <SpaceTelemetryCanvas />
-              <div style={{ position: 'absolute', bottom: '2.2rem', left: '2.2rem', right: '2.2rem' }} className="glass-panel">
-                <div style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(9, 13, 22, 0.95)', border: '1px solid var(--accent-primary)' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-                    <Activity size={20} />
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#ffffff' }}>Lucknow Dispatch Telemetry</div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Active orbital scanning & dispatch lines in Hazratganj & Gomti Nagar</div>
-                  </div>
+          {onDrawingsClick && (
+            <button
+              type="button"
+              onClick={onDrawingsClick}
+              className="glass-card"
+              style={{
+                textAlign: 'left',
+                cursor: 'pointer',
+                border: '1px solid var(--bg-glass-border)',
+                background: '#fff',
+                width: '100%'
+              }}
+            >
+              <span className="badge badge-info" style={{ marginBottom: '0.85rem' }}>Also from DVS</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', marginBottom: '0.6rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'var(--gradient-brand)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <PencilRuler size={18} />
                 </div>
+                <h2 style={{ fontSize: '1.25rem', margin: 0 }}>House Drawings</h2>
               </div>
-            </div>
-          </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                2D AutoCAD plans, including plumbing and electrical, at ₹6 per sq ft. 3D front elevation for a flat ₹6,000. Delivered online anywhere in India in 10 days.
+              </p>
+              <span style={{ color: 'var(--accent-primary)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                See drawings and sample work <ArrowRight size={16} />
+              </span>
+            </button>
+          )}
         </div>
       </section>
 
-      {/* Solutions Matrix */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Our Professional Pest Control Solutions</h2>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-            Best-in-class pest control treatment packages priced transparently in Indian Rupees (₹) for domestic homes and commercial offices in Lucknow.
+      <section className="home-wrap">
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>Our pest control services</h2>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
+            Treatment packages with starting rates for homes and commercial properties in Lucknow.
           </p>
         </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+        <div className="home-services-grid">
           {services.map(srv => (
-            <div key={srv.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
-              {srv.isPopular && <div className="badge badge-warning" style={{ alignSelf: 'flex-start', marginBottom: '0.75rem' }}>Popular Service</div>}
-              
-              {srv.id === 'SRV-101' || srv.id === 'SRV-102' || srv.id === 'SRV-103' || srv.id === 'SRV-104' || srv.id === 'SRV-105' ? (
-                <div style={{ 
-                  width: '100%', 
-                  height: '180px', 
-                  borderRadius: 'var(--radius-sm)', 
-                  marginBottom: '1.25rem',
-                  backgroundImage: 'url(/services-grid.jpg)',
-                  backgroundSize: '205% 205%',
-                  backgroundPosition: 
-                    srv.id === 'SRV-101' ? '0% 0%' : // Top Left (Cockroaches)
-                    srv.id === 'SRV-102' ? '100% 0%' : // Top Right (Rodents)
-                    srv.id === 'SRV-103' ? '0% 100%' : // Bottom Left (Mosquitoes)
-                    srv.id === 'SRV-104' ? '100% 100%' : // Bottom Right (Termites)
-                    '0% 100%', // Bottom Left for fumigation
-                  boxShadow: 'inset 0 0 10px rgba(0,0,0,0.05)',
-                  border: '1px solid var(--bg-glass-border)'
-                }} />
-              ) : (
-                <img src={srv.imageUrl} alt={srv.title} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem' }} />
-              )}
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{srv.title}</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.25rem', flexGrow: 1, lineHeight: 1.5 }}>
+            <div key={srv.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
+              {srv.isPopular && <div className="badge badge-warning" style={{ alignSelf: 'flex-start', marginBottom: '0.75rem' }}>Popular</div>}
+              <div style={serviceImageStyle(srv.id)} role="img" aria-label={srv.title} />
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{srv.title}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', marginBottom: '1.1rem', flexGrow: 1, lineHeight: 1.55 }}>
                 {srv.description}
               </p>
-              <div style={{ paddingTop: '1rem', borderTop: '1px solid var(--bg-glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem', marginTop: 'auto' }}>
                 <div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>STARTING RATE</span>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.4rem', color: 'var(--accent-primary)' }}>₹{srv.basePrice.toLocaleString()}</span>
+                  <div style={{ fontSize: '0.7rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700 }}>Starting rate</div>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.3rem', color: 'var(--accent-primary)' }}>
+                    ₹{srv.basePrice.toLocaleString('en-IN')}
+                  </div>
                 </div>
-                <button className="btn btn-secondary btn-sm" onClick={onBookClick}>
-                  Book Inspection
-                </button>
+                <button className="btn btn-outline btn-sm" onClick={onBookClick}>Book Inspection</button>
               </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '1.75rem' }}>
+          <button className="btn btn-primary" onClick={onServicesClick}>
+            Full rate card <ArrowRight size={16} />
+          </button>
+        </div>
+      </section>
+
+      <section className="home-wrap">
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>Why book with DVS</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>Clear prices, a Lucknow team, and a direct way to get in touch.</p>
+        </div>
+        <div className="home-why-grid">
+          {[
+            { icon: MapPin, title: 'Based in Lucknow', body: 'We serve homes and businesses across Lucknow and Uttar Pradesh.' },
+            { icon: BadgeIndianRupee, title: 'Published rates', body: 'Pest control prices are listed by service and by BHK. House drawings are ₹6 per sq ft, or ₹6,000 for a 3D front elevation.' },
+            { icon: Clock, title: 'Open all week', body: 'Monday to Sunday, 8:00 AM to 9:00 PM. Call or WhatsApp +91 93304 78897.' },
+            { icon: ShieldCheck, title: 'Termite warranty', body: 'The subterranean termite treatment is offered with a 5-year written warranty.' },
+          ].map(item => (
+            <div key={item.title} className="glass-card" style={{ background: '#fff' }}>
+              <item.icon size={22} color="var(--accent-primary)" style={{ marginBottom: '0.75rem' }} />
+              <h3 style={{ fontSize: '1.05rem', marginBottom: '0.4rem' }}>{item.title}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.55, margin: 0 }}>{item.body}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Approved Feedback Showcase */}
-      <section style={{ background: 'var(--bg-secondary)', padding: '4rem 1.5rem', borderTop: '1px solid var(--bg-glass-border)', borderBottom: '1px solid var(--bg-glass-border)', position: 'relative', zIndex: 3 }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="badge badge-success" style={{ marginBottom: '0.5rem' }}>Verified Client Testimonials</div>
-            <h2 style={{ fontSize: '2rem' }}>Trusted Across Lucknow & Uttar Pradesh</h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {approvedFeedback.map(item => (
-              <div key={item.id} className="glass-panel" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem', background: '#ffffff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#d97706' }}>
-                  {[...Array(item.rating)].map((_, i) => <Star key={i} size={18} fill="#d97706" />)}
-                </div>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontStyle: 'italic', lineHeight: 1.6, flexGrow: 1 }}>
-                  "{item.comment}"
-                </p>
-                <div style={{ borderTop: '1px solid var(--bg-glass-border)', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
-                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{item.customerName}</span>
-                  <span style={{ color: 'var(--text-muted)' }}>{item.date}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Lucknow Localities We Serve */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <div className="badge badge-info" style={{ marginBottom: '0.5rem' }}>Our Coverage Area</div>
-          <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Pest Control Service Areas in Lucknow</h2>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-            DVS provides emergency same-day pest control inspection and treatment services across all major locations and localities in Lucknow.
+      <section className="home-wrap">
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>Areas we serve in Lucknow</h2>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
+            Pest control for these localities, and nearby areas across Lucknow.
           </p>
         </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1.5rem' }}>
+        <div className="home-areas-grid">
           {[
             'Gomti Nagar', 'Hazratganj', 'Indira Nagar', 'Alambagh',
             'Jankipuram', 'Mahanagar', 'Ashiyana', 'Vikas Nagar',
             'Chowk', 'Charbagh', 'Chinhat', 'Vrindavan Yojna'
-          ].map((loc, idx) => (
-            <div key={idx} className="glass-panel table-row-hover" style={{ 
-              padding: '1.25rem', 
-              textAlign: 'center', 
-              background: '#ffffff', 
-              border: '1px solid var(--bg-glass-border)',
-              borderRadius: 'var(--radius-sm)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem',
-              cursor: 'default'
-            }}>
-              <MapPin size={20} style={{ color: 'var(--accent-primary)' }} />
-              <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{loc}</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>2-4 Hr Dispatch</span>
+          ].map(loc => (
+            <div key={loc} className="glass-panel" style={{ padding: '1rem 1rem', textAlign: 'center', background: '#fff' }}>
+              <div style={{ fontWeight: 700 }}>{loc}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Dynamic FAQ Accordion */}
-      <section style={{ maxWidth: '900px', margin: '0 auto', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Frequently Asked Questions</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Clear answers on our pest management protocols and Lucknow service coverage.</p>
+      <section style={{ maxWidth: '800px', margin: '0 auto', width: '100%', padding: '0 1.25rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>Frequently asked questions</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>About pest control in Lucknow.</p>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {faqs.map((faq, idx) => (
-            <div key={idx} className="glass-panel" style={{ overflow: 'hidden', background: '#ffffff' }}>
+            <div key={idx} className="glass-panel" style={{ overflow: 'hidden', background: '#fff' }}>
               <button
+                type="button"
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                style={{ width: '100%', padding: '1.25rem 1.5rem', background: 'none', border: 'none', textAlign: 'left', color: 'var(--text-primary)', fontWeight: 600, fontSize: '1.05rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                style={{ width: '100%', padding: '1.1rem 1.25rem', background: 'none', border: 'none', textAlign: 'left', color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', gap: '1rem' }}
               >
                 <span>{faq.q}</span>
-                <ChevronDown size={20} style={{ transform: openFaq === idx ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform var(--transition-fast)', color: 'var(--accent-primary)' }} />
+                <ChevronDown size={20} style={{ flexShrink: 0, transform: openFaq === idx ? 'rotate(180deg)' : 'none', transition: 'transform var(--transition-fast)', color: 'var(--accent-primary)' }} />
               </button>
               {openFaq === idx && (
-                <div style={{ padding: '0 1.5rem 1.25rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, borderTop: '1px solid var(--bg-glass-border)', paddingTop: '1rem' }}>
+                <div style={{ padding: '0 1.25rem 1.15rem', color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, borderTop: '1px solid var(--bg-glass-border)', paddingTop: '0.9rem' }}>
                   {faq.a}
                 </div>
               )}
@@ -553,6 +280,22 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
         </div>
       </section>
 
+      {onChatClick && (
+        <section className="home-wrap" style={{ textAlign: 'center' }}>
+          <div className="glass-card" style={{ background: '#fff', padding: '2rem 1.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Prefer to talk it through?</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+              Chat with DVS, or call {PHONE_DISPLAY}.
+            </p>
+            <div className="home-cta-row" style={{ justifyContent: 'center' }}>
+              <button className="btn btn-primary" onClick={onChatClick}>
+                <MessageCircle size={16} /> Chat with DVS
+              </button>
+              <button className="btn btn-secondary" onClick={onBookClick}>Book Inspection</button>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

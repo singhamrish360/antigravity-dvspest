@@ -58,9 +58,9 @@ export const ConsultationForm: React.FC<Props> = ({ onSuccess }) => {
     <div className="glass-panel animate-fade-in" style={{ padding: '2.5rem', maxWidth: '800px', margin: '0 auto', background: '#ffffff', boxShadow: 'var(--shadow-lg)' }}>
       {step < 3 && (
         <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <div className="badge badge-warning" style={{ marginBottom: '0.5rem' }}>DVS Inspection Dispatch</div>
+          <div className="badge badge-warning" style={{ marginBottom: '0.5rem' }}>Book an inspection</div>
           <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem' }}>Book Pest Control & Inspection</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Instant Lead ID Generation & Lucknow Dispatch Engine</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Tell us about the property and we will get back to you.</p>
 
           {/* Step indicator */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem' }}>

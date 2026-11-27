@@ -47,14 +47,22 @@
   padding: 0;
 }
 
+html {
+  min-height: 100%;
+  overflow-y: scroll;
+}
+
 html, body {
-  height: 100%;
   font-family: var(--font-body);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100%;
   position: relative;
 }
 
@@ -324,4 +332,8 @@ a:hover {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 899px) {
+  .site-chatbot { display: none; }
 }

@@ -18,6 +18,7 @@ import { AdminLayout } from './modules/admin/AdminLayout';
 import { CustomerDashboard } from './modules/customer/CustomerDashboard';
 import { PestRecognitionAI } from './modules/ai/PestRecognitionAI';
 import { AIChatbotWidget } from './modules/ai/AIChatbotWidget';
+import { StickyContactBar } from './modules/public/StickyContactBar';
 import { LoginGate } from './modules/admin/LoginGate';
 import { security } from './core/security';
 
@@ -94,8 +95,8 @@ export const App: React.FC = () => {
       {mode === 'public' && (
         <>
           <PublicNavigation activeView={publicView} setActiveView={handlePublicView} setMode={handleModeChange} />
-          <main style={{ flexGrow: 1, padding: '2rem 0' }}>
-            {publicView === 'home' && <HomePage onBookClick={() => handlePublicView('consultation')} onServicesClick={() => handlePublicView('services')} onChatClick={() => handlePublicView('virtual-twin')} />}
+          <main style={{ flexGrow: 1 }}>
+            {publicView === 'home' && <HomePage onBookClick={() => handlePublicView('consultation')} onServicesClick={() => handlePublicView('services')} onChatClick={() => handlePublicView('virtual-twin')} onDrawingsClick={() => handlePublicView('drawings')} />}
             {publicView === 'services' && <ServicesPage onBookClick={() => handlePublicView('consultation')} />}
             {publicView === 'consultation' && <ConsultationForm />}
             {publicView === 'blogs' && <BlogsPage />}
@@ -105,8 +106,15 @@ export const App: React.FC = () => {
             {publicView === 'virtual-twin' && <VirtualTwinPage onBookClick={() => handlePublicView('consultation')} />}
             {publicView === 'drawings' && <DrawingsPage />}
           </main>
-          <PublicFooter onChatClick={() => { handlePublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} onDrawingsClick={() => { handlePublicView('drawings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
-          <AIChatbotWidget />
+          <PublicFooter
+            onChatClick={() => { handlePublicView('virtual-twin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onDrawingsClick={() => { handlePublicView('drawings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onServicesClick={() => { handlePublicView('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onContactClick={() => { handlePublicView('consultation'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onLoginClick={() => handleModeChange('admin')}
+          />
+          <StickyContactBar />
+          <div className="site-chatbot"><AIChatbotWidget /></div>
         </>
       )}
 
@@ -129,10 +137,10 @@ export const App: React.FC = () => {
             </button>
           </header>
 
-          <main style={{ flexGrow: 1, padding: '2rem 0' }}>
+          <main style={{ flexGrow: 1 }}>
             <PestRecognitionAI />
           </main>
-          <AIChatbotWidget />
+          <div className="site-chatbot"><AIChatbotWidget /></div>
         </div>
       )}
 

@@ -5,20 +5,12 @@ export const GalleryPage: React.FC = () => {
 
   const galleryItems = [
     {
-      title: 'Commercial Restaurant Kitchen Sanitation',
-      category: 'Commercial Sanitation',
+      title: 'Kitchen treatment comparison',
+      category: 'Sanitation',
       before: '/before-after-infestation.png',
       after: '/before-after-infestation.png',
       isSplitSprite: true,
-      desc: 'Complete grease trap degreasing, biological foam application, and deep tiles sanitization in Hazratganj restaurant.'
-    },
-    {
-      title: 'Subterranean Termite Barrier Defense',
-      category: 'Termite Protection',
-      before: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80', // Damaged dusty construction wood
-      after: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', // Clean foundation structure completed
-      isSplitSprite: false,
-      desc: 'Thermal imaging identified hidden colony gallery. Installed non-repellent chemical drill barrier.'
+      desc: 'A before-and-after comparison from our treatment gallery.'
     }
   ];
 
@@ -26,9 +18,9 @@ export const GalleryPage: React.FC = () => {
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
       <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
         <div className="badge badge-success" style={{ marginBottom: '0.75rem' }}>Transformation Gallery</div>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Before & After Treatment Evidence</h1>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Before and after</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
-          Verified visual proof captured by field technicians during active compliance operations in Lucknow.
+          A comparison photo from our treatment work.
         </p>
       </div>
 
