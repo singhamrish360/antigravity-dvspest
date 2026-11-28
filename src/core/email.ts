@@ -1,5 +1,5 @@
 /**
- * Email Dispatch Utility for DVS Pest Control Infrastructure Co
+ * Email Dispatch Utility for DVS Infra Consultant
  * Integrates client-side email notifications using the free FormSubmit API.
  * Requires zero registration keys to work out-of-the-box.
  */

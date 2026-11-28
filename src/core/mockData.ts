@@ -141,7 +141,7 @@ Creating an uninterrupted chemical barrier along exterior and interior footings 
     readingTimeMinutes: 4,
     coverImageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
     isPublished: true,
-    seoTitle: 'Termite Control in Lucknow | DVS Pest Control Infrastructure Co',
+    seoTitle: 'Termite Control in Lucknow | DVS Infra Consultant',
     seoDescription: 'Expert subterranean termite control and 5-year warranty treatment in Lucknow, Uttar Pradesh.'
   }
 ];
@@ -164,14 +164,14 @@ export const initialEmailTemplates: EmailTemplate[] = [
   {
     id: 'TMPL-01',
     name: 'Consultation Booking Confirmation',
-    subject: 'Your DVS Pest Inspection is Confirmed - Ref #{LEAD_ID}',
-    bodyHtml: `<h3>Dear {CUSTOMER_NAME},</h3><p>Thank you for choosing <strong>DVS PEST CONTROL INFRASTRUCTURE CO</strong>. We have registered your inspection request for <strong>{SERVICE_NAME}</strong> in Lucknow.</p><br/><p>Best regards,<br/><strong>DVS Operations Team, Lucknow HQ</strong></p>`,
+    subject: 'Your DVS Infra Consultant Inspection is Confirmed - Ref #{LEAD_ID}',
+    bodyHtml: `<h3>Dear {CUSTOMER_NAME},</h3><p>Thank you for choosing <strong>DVS Infra Consultant (DVS Pest Control Infrastructure Co)</strong>. We have registered your inspection request for <strong>{SERVICE_NAME}</strong> in Lucknow.</p><br/><p>Best regards,<br/><strong>DVS Operations Team, Lucknow HQ</strong></p>`,
     triggerEvent: 'Booking Confirmation'
   }
 ];
 
 export const initialSystemSettings: SystemSettings = {
-  companyName: 'DVS PEST CONTROL INFRASTRUCTURE CO',
+  companyName: 'DVS Infra Consultant',
   contactEmail: 'dvsinfrapest@gmail.com',
   contactPhone: '+91 93304 78897',
   address: 'Lucknow',

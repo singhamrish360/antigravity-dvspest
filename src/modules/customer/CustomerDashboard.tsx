@@ -137,7 +137,7 @@ export const CustomerDashboard: React.FC<Props> = ({ setMode }) => {
             </div>
             <div>
               <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-primary)' }}>
-                DVS PEST CONTROL
+                DVS INFRA CONSULTANT
               </span>
               <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 Premium Client Portal
@@ -556,7 +556,7 @@ export const CustomerDashboard: React.FC<Props> = ({ setMode }) => {
 
       {/* Footer */}
       <footer style={{ background: '#1e293b', color: '#94a3b8', padding: '1.5rem 2rem', textAlign: 'center', fontSize: '0.85rem', borderTop: '1px solid #334155', marginTop: 'auto' }}>
-        © 2026 DVS PEST CONTROL INFRASTRUCTURE CO. All rights reserved. Premium Client Portal.
+        © 2026 DVS Infra Consultant (DVS Pest Control Infrastructure Co). All rights reserved. Premium Client Portal.
       </footer>
 
     </div>

@@ -38,14 +38,14 @@ export const PestLandingPage: React.FC<{ route: PestRoute }> = ({ route }) => {
         <div style={{ textAlign: 'center', maxWidth: '860px', margin: '0 auto' }}>
           <div className="badge badge-warning" style={{ marginBottom: '0.75rem' }}>
             {route.kind === 'area'
-              ? 'DVS Pest Control, Lucknow'
+              ? 'DVS Infra Consultant, Lucknow'
               : route.kind === 'builders'
                 ? 'For builders and new buildings'
                 : route.kind === 'hub'
                   ? 'Pest control in Lucknow'
                   : route.kind === 'segment'
                     ? 'Homes, shops and businesses in Lucknow'
-                    : 'DVS Pest Control'}
+                    : 'DVS Infra Consultant'}
           </div>
           <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '1rem', fontWeight: 800, lineHeight: 1.2 }}>{route.h1}</h1>
           {route.intro.map((paragraph) => (

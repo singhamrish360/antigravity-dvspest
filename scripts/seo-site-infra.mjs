@@ -134,7 +134,7 @@ if (fs.existsSync(routesFile)) {
     if (route.path && route.title) titles.set(`${SITE}${route.path}`, route.title);
   }
 }
-titles.set(`${SITE}/`, 'DVS Pest Control | Lucknow — pest control for homes and businesses');
+titles.set(`${SITE}/`, 'Pest Control in Lucknow | DVS Infra Consultant');
 titles.set(DRAWINGS, 'House plan and 3D elevation drawing services in India');
 titles.set(HINDI, 'घर का नक्शा / मकान का नक्शा');
 
@@ -147,9 +147,11 @@ const home = locs.filter((u) => u === `${SITE}/` || u === SITE);
 const drawings = locs.filter((u) => u.includes('/drawings')).sort();
 const other = locs.filter((u) => !home.includes(u) && !drawings.includes(u));
 
-const llmsFull = `# DVS Pest Control Infrastructure Co
+const llmsFull = `# DVS Infra Consultant
 
-> A Lucknow business with two public services: pest control in Lucknow and Uttar Pradesh, and online house-drawing (AutoCAD) work delivered anywhere in India.
+> DVS Infra Consultant (legal name: DVS Pest Control Infrastructure Co) is a Lucknow business with two public services: pest control in Lucknow and Uttar Pradesh, and online house-drawing (AutoCAD) work delivered anywhere in India.
+
+Tagline: Design your home. Protect your home.
 
 The website is ${SITE}
 Contact: +91 93304 78897 (call or WhatsApp). Email: dvsinfrapest@gmail.com
@@ -158,7 +160,7 @@ Sitemap: ${SITE}/sitemap.xml
 
 ## Pest control
 
-- [DVS Pest Control | Lucknow](${SITE}/)
+- [Pest Control in Lucknow | DVS Infra Consultant](${SITE}/)
 - Pest control for homes and businesses in Lucknow and Uttar Pradesh, including cockroach, termite, rodent, mosquito and related treatments.
 - Call or WhatsApp +91 93304 78897 to book an inspection.
 
