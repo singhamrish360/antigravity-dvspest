@@ -1,9 +1,9 @@
-# DVS Pest Control Infrastructure Co - Customer Assistant Knowledge Base
+# DVS Infra Consultant (DVS Pest Control Infrastructure Co) - Customer Assistant Knowledge Base
 # Source: facts already published on the website (src/core/mockData.ts, HomePage.tsx, ServicesPage.tsx).
 # Lines starting with '#' are ignored by the API loader. Do not add facts that are not on the website.
 
 == COMPANY ==
-- Business name: DVS PEST CONTROL INFRASTRUCTURE CO (DVS Pest Control), headquartered in Lucknow, Uttar Pradesh, India.
+- Business name: DVS Infra Consultant (legal name: DVS Pest Control Infrastructure Co; also known as DVS Pest Control), headquartered in Lucknow, Uttar Pradesh, India. Tagline: Design your home. Protect your home. Two divisions: Pest Control in Lucknow and House Drawings (delivered online across India).
 - Website: pestcontrolinfra.co.in
 - Phone / WhatsApp: +91 93304 78897 (WhatsApp link: https://wa.me/919330478897)
 - Email: dvsinfrapest@gmail.com

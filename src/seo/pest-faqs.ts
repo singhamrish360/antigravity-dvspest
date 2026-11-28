@@ -30,7 +30,7 @@ export const CORE_PEST_FAQS: FaqItem[] = [
 
 export const HOME_PEST_FAQS: FaqItem[] = [
   {
-    q: 'How fast can DVS Pest Control respond in Lucknow?',
+    q: 'How fast can DVS Infra Consultant respond in Lucknow?',
     a: 'We offer a quick response across Lucknow, including Hazratganj, Gomti Nagar, Alambagh, Indira Nagar and surrounding areas. Call or WhatsApp to book an inspection.',
   },
   {

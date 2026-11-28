@@ -67,7 +67,7 @@ const makeWelcome = (mode: ChatMode, phone: string): ChatMessage => ({
   sender: 'bot',
   isWelcome: true,
   text: mode === 'dvs'
-    ? `Namaste! 🙏 I'm the DVS Pest Assistant for Lucknow. Tell me your pest problem (cockroach, termite, mosquito, rats, bed bugs…) and I'll share treatment options and ₹ rates, or help you book an inspection. Prefer talking? Call/WhatsApp ${phone}.`
+    ? `Namaste! 🙏 I'm the DVS Infra Assistant for Lucknow. Tell me your pest problem (cockroach, termite, mosquito, rats, bed bugs…) and I'll share treatment options and ₹ rates, or help you book an inspection. Prefer talking? Call/WhatsApp ${phone}.`
     : `Twin mode: you're now chatting with Amrish Singh's digital replica (experimental). Switch back to the DVS assistant anytime under Advanced.`
 });
 
@@ -369,7 +369,7 @@ export const VirtualTwinPage: React.FC<Props> = ({ onBookClick }) => {
       {/* Header */}
       <div style={{ textAlign: 'center' }}>
         <div className="badge badge-warning" style={{ marginBottom: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-          <Shield size={14} /> DVS Pest Assistant • Lucknow
+          <Shield size={14} /> DVS Infra Assistant • Lucknow
         </div>
         <h1 style={{ fontSize: '2.4rem', marginBottom: '0.6rem', fontWeight: 800 }}>
           Chat with <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>DVS</span>
@@ -407,7 +407,7 @@ export const VirtualTwinPage: React.FC<Props> = ({ onBookClick }) => {
               {mode === 'dvs' ? <Shield size={20} /> : <Brain size={20} />}
             </div>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{mode === 'dvs' ? 'DVS Pest Assistant' : 'Amrish Singh — Digital Twin'}</div>
+              <div style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{mode === 'dvs' ? 'DVS Infra Assistant' : 'Amrish Singh — Digital Twin'}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {status === 'processing' ? 'Typing…' : status === 'recording' ? 'Listening…' : status === 'speaking' ? 'Speaking…'
                   : mode === 'dvs' ? '₹ rates • Quick response across Lucknow • 8 AM - 9 PM' : 'Experimental persona mode'}

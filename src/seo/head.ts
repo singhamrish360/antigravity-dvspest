@@ -10,9 +10,9 @@ export interface HeadTags {
 }
 
 export const homeHead = (jsonLd: unknown): HeadTags => ({
-  title: 'DVS Pest Control | Lucknow',
+  title: 'Pest Control in Lucknow | DVS Infra Consultant',
   description:
-    'DVS Pest Control Infrastructure Co provides premier residential and commercial pest control services in Lucknow and Uttar Pradesh. Book professional cockroach, termite, rodent, and mosquito treatments.',
+    'DVS Infra Consultant provides pest control for homes and businesses in Lucknow and Uttar Pradesh, and online house drawings delivered anywhere in India. Book cockroach, termite, rodent and mosquito treatments, or get a house plan quote.',
   canonical: `${SITE_URL}/`,
   ogImage: OG_IMAGE_HOME,
   jsonLd,

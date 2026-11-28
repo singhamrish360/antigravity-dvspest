@@ -80,11 +80,12 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
           line-height: 1.15;
         }
         .site-brand-sub {
-          font-size: 0.7rem;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+          font-size: 0.68rem;
+          letter-spacing: 0.01em;
           color: var(--text-secondary);
           margin-top: 1px;
+          line-height: 1.3;
+          max-width: 13.5rem;
         }
         .site-desktop-nav {
           display: none;
@@ -150,8 +151,8 @@ export const PublicNavigation: React.FC<Props> = ({ activeView, setActiveView, s
             <Shield size={20} />
           </div>
           <div>
-            <div className="site-brand-name">DVS Pest Control</div>
-            <div className="site-brand-sub">Lucknow</div>
+            <div className="site-brand-name">DVS Infra Consultant</div>
+            <div className="site-brand-sub">Design your home. Protect your home.</div>
           </div>
         </a>
 

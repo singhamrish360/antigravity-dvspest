@@ -24,7 +24,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
 
   const faqs = [
     {
-      q: 'How fast can DVS Pest Control respond in Lucknow?',
+      q: 'How fast can DVS Infra Consultant respond in Lucknow?',
       a: 'We offer a quick response across Lucknow, including Hazratganj, Gomti Nagar, Alambagh, Indira Nagar and surrounding areas. Call or WhatsApp to book an inspection.'
     },
     {
@@ -130,7 +130,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
               Pest control for homes and businesses in Lucknow
             </h1>
             <p className="home-hero-lead">
-              DVS Pest Control treats cockroaches, termites, rodents, mosquitoes and does warehouse fumigation. Rates are listed on the site. Call or WhatsApp to book an inspection.
+              DVS Infra Consultant treats cockroaches, termites, rodents, mosquitoes and does warehouse fumigation. We also draft house plans and 3D elevations. Rates are listed on the site. Call or WhatsApp to book an inspection.
             </p>
             <div className="home-cta-row">
               <button className="btn btn-primary btn-lg" onClick={onBookClick}>
@@ -173,7 +173,7 @@ export const HomePage: React.FC<Props> = ({ onBookClick, onServicesClick, onChat
                 display: 'block'
               }}
             >
-              <span className="badge badge-info" style={{ marginBottom: '0.85rem' }}>Also from DVS</span>
+              <span className="badge badge-info" style={{ marginBottom: '0.85rem' }}>House Drawings</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', marginBottom: '0.6rem' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'var(--gradient-brand)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <PencilRuler size={18} />

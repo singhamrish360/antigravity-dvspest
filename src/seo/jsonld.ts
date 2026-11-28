@@ -1,19 +1,28 @@
 import { FaqItem } from './faqs';
 import {
+  ALTERNATE_NAMES,
   CITY_BASE,
   DRAFTING_SERVICE_NAME,
   ELEVATION_FLAT_FEE,
+  LEGAL_NAME,
   PHONE_E164,
   RATE_PER_SQFT,
   SITE_NAME,
   SITE_URL,
 } from './constants';
+
 import { lucknowLocalitiesServed } from './pest-routes';
+
+const brandName = {
+  name: SITE_NAME,
+  legalName: LEGAL_NAME,
+  alternateName: [...ALTERNATE_NAMES],
+};
 
 export const pestControlJsonLd = () => ({
   '@context': 'https://schema.org',
   '@type': 'PestControlService',
-  name: SITE_NAME,
+  ...brandName,
   image: `${SITE_URL}/services-grid.jpg`,
   '@id': `${SITE_URL}/#pestcontrol`,
   url: SITE_URL,
@@ -55,7 +64,7 @@ export const draftingJsonLd = (pageUrl: string, faqs: FaqItem[]) => ({
         '2D AutoCAD house plans, sections and elevations with plumbing and electrical layouts at ₹6 per sq ft, or a 3D front elevation for a flat ₹6,000. Delivered online anywhere in India in 10 days, with up to 2 to 3 major and 4 to 5 minor revisions.',
       provider: {
         '@type': 'LocalBusiness',
-        name: SITE_NAME,
+        ...brandName,
         telephone: PHONE_E164,
         address: {
           '@type': 'PostalAddress',
@@ -140,7 +149,7 @@ export const pestPageJsonLd = (opts: {
       {
         '@type': ['LocalBusiness', 'PestControlService'],
         '@id': `${SITE_URL}/#pestcontrol`,
-        name: SITE_NAME,
+        ...brandName,
         image: `${SITE_URL}/services-grid.jpg`,
         url: SITE_URL,
         telephone: PHONE_E164,
@@ -192,7 +201,7 @@ export const pestHomeJsonLd = (faqs: FaqItem[]) =>
     serviceName: 'Pest control in Lucknow',
     serviceType: 'Pest control',
     description:
-      'DVS Pest Control treats cockroaches, termites, rodents and mosquitoes, and does warehouse fumigation, for homes and businesses in Lucknow and Uttar Pradesh.',
+      'DVS Infra Consultant treats cockroaches, termites, rodents and mosquitoes, and does warehouse fumigation, for homes and businesses in Lucknow and Uttar Pradesh.',
     faqs,
   });
 

@@ -48,9 +48,12 @@ export const PublicFooter: React.FC<Props> = ({
               <Shield size={18} />
             </div>
             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
-              DVS Pest Control
+              DVS Infra Consultant
             </span>
           </div>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.35rem', lineHeight: 1.6, fontWeight: 600 }}>
+            Design your home. Protect your home.
+          </p>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem', lineHeight: 1.6 }}>
             Pest control for homes and businesses in Lucknow and Uttar Pradesh, and house drawings delivered anywhere in India.
           </p>
@@ -124,7 +127,7 @@ export const PublicFooter: React.FC<Props> = ({
       </div>
 
       <div style={{ maxWidth: '1120px', margin: '2.5rem auto 0', paddingTop: '1.25rem', borderTop: '1px solid var(--bg-glass-border)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-        <div>© 2026 DVS Pest Control, Lucknow, Uttar Pradesh.</div>
+        <div>© 2026 DVS Infra Consultant (DVS Pest Control Infrastructure Co), Lucknow, Uttar Pradesh.</div>
         {onLoginClick && (
           <button
             type="button"

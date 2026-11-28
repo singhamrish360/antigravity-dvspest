@@ -57,7 +57,7 @@ export const AdminLayout: React.FC<Props> = ({ setMode }) => {
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '0.95rem', background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
-              DVS PEST CONTROL
+              DVS INFRA CONSULTANT
             </div>
             <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)' }}>
               LUCKNOW SAAS ENGINE
